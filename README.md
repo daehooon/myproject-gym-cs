@@ -1,7 +1,6 @@
 # Cat Gym - CS
     Server
-        ?Table, ServerApp, StatementHandlerThread
-        util (복습)
+        Table(m,p,t), ServerApp
 
     Client
         ?Handler, ClientApp

@@ -1,29 +1,33 @@
 package com.cat.gym.handler;
 
 import java.util.Iterator;
-import java.util.List;
-import com.cat.gym.domain.Board;
+import com.cat.driver.Statement;
 
 public class BoardListHandler implements Command {
 
-  public BoardListHandler(List<Board> boardList) {
-    super(boardList);
+  Statement stmt;
+
+  public BoardListHandler(Statement stmt) {
+    this.stmt = stmt;
   }
 
   @Override
-  public void service() {
+  public void service() throws Exception {
     System.out.println("[게시글 목록]");
     System.out.println();
 
-    Iterator<Board> iterator = boardList.iterator();
+    Iterator<String> results = stmt.executeQuery("board/selectall");
 
-    while (iterator.hasNext()) {
-      Board b = iterator.next();
-      System.out.printf("%d %s %s %s %d\n",
-          b.getNo(), b.getTitle(), b.getId(),
-          b.getViewCount(), b.getLike());
+    while (results.hasNext()) {
+      String[] fields = results.next().split(",");
+
+      System.out.printf("%s, %s, %s, %s, %s\n",
+          fields[0],
+          fields[1],
+          fields[2],
+          fields[3],
+          fields[4]);
       System.out.println();
     }
   }
-
 }
