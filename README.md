@@ -1,6 +1,6 @@
 # Cat Gym - CS
     Server
-        Table(m,p,t), ServerApp
+        Table t - (update, delete), ServerApp
 
     Client
         ?Handler, ClientApp

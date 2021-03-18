@@ -3,6 +3,7 @@ package com.cat.gym.domain;
 import java.sql.Date;
 
 public class Member {
+  private int no;
   private String name;
   private String phoneNumber;
   private String residence;
@@ -14,22 +15,24 @@ public class Member {
 
   public Member(String csv) {
     String[] fields = csv.split(",");
-    this.setName(fields[0]);
-    this.setPhoneNumber(fields[1]);
-    this.setResidence(fields[2]);
-    this.setId(fields[3]);
-    this.setPassword(fields[4]);
-    this.setApply(Date.valueOf(fields[5]));
+    this.setNo(Integer.parseInt(fields[0]));
+    this.setName(fields[1]);
+    this.setPhoneNumber(fields[2]);
+    this.setResidence(fields[3]);
+    this.setId(fields[4]);
+    this.setPassword(fields[5]);
+    this.setApply(Date.valueOf(fields[6]));
   }
 
   @Override
   public String toString() {
-    return "Member [name=" + name + ", phoneNumber=" + phoneNumber + ", residence=" + residence
-        + ", id=" + id + ", password=" + password + ", apply=" + apply + "]";
+    return "Member [no=" + no + ", name=" + name + ", phoneNumber=" + phoneNumber + ", residence="
+        + residence + ", id=" + id + ", password=" + password + ", apply=" + apply + "]";
   }
 
   public String toCsvString() {
-    return String.format("%s,%s,%s,%s,%s,%s", 
+    return String.format("%d,%s,%s,%s,%s,%s,%s",
+        this.getNo(),
         this.getName(), 
         this.getPhoneNumber(), 
         this.getResidence(), 
@@ -41,12 +44,13 @@ public class Member {
   public static Member valueOfCsv(String csv) {
     String[] fields = csv.split(",");
     Member m = new Member();
-    m.setName(fields[0]);
-    m.setPhoneNumber(fields[1]);
-    m.setResidence(fields[2]);
-    m.setId(fields[3]);
-    m.setPassword(fields[4]);
-    m.setApply(Date.valueOf(fields[5]));
+    m.setNo(Integer.parseInt(fields[0]));
+    m.setName(fields[1]);
+    m.setPhoneNumber(fields[2]);
+    m.setResidence(fields[3]);
+    m.setId(fields[4]);
+    m.setPassword(fields[5]);
+    m.setApply(Date.valueOf(fields[6]));
     return m;
   }
 
@@ -57,6 +61,7 @@ public class Member {
     result = prime * result + ((apply == null) ? 0 : apply.hashCode());
     result = prime * result + ((id == null) ? 0 : id.hashCode());
     result = prime * result + ((name == null) ? 0 : name.hashCode());
+    result = prime * result + no;
     result = prime * result + ((password == null) ? 0 : password.hashCode());
     result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
     result = prime * result + ((residence == null) ? 0 : residence.hashCode());
@@ -87,6 +92,8 @@ public class Member {
         return false;
     } else if (!name.equals(other.name))
       return false;
+    if (no != other.no)
+      return false;
     if (password == null) {
       if (other.password != null)
         return false;
@@ -105,6 +112,12 @@ public class Member {
     return true;
   }
 
+  public int getNo() {
+    return no;
+  }
+  public void setNo(int no) {
+    this.no = no;
+  }
   public String getName() {
     return name;
   }
