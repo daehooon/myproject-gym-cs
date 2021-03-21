@@ -1,27 +1,31 @@
 package com.cat.gym.handler;
 
 import java.util.Iterator;
-import java.util.List;
-import com.cat.gym.domain.Member;
+import com.cat.driver.Statement;
 
-public class MemberListHandler extends AbstractMemberHandler {
+public class MemberListHandler implements Command {
 
-  public MemberListHandler(List<Member> memberList) {
-    super(memberList);
+  Statement stmt;
+
+  public MemberListHandler(Statement stmt) {
+    this.stmt = stmt;
   }
 
   @Override
-  public void service() {
+  public void service() throws Exception {
     System.out.println("[회원 목록]");
     System.out.println();
 
-    Iterator<Member> iterator = memberList.iterator();
+    Iterator<String> results = stmt.executeQuery("member/selectall");
 
-    while (iterator.hasNext()) {
-      Member m = iterator.next();
-      System.out.printf("%s %s %s\n", m.getName(), m.getId(), m.getPhoneNumber());
+    while (results.hasNext()) {
+      String[] fields = results.next().split(",");
+      System.out.printf("%s, %s, %s, %s\n",
+          fields[0],
+          fields[1],
+          fields[2],
+          fields[3]);
       System.out.println();
     }
   }
-
 }

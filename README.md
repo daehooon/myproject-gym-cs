@@ -1,6 +1,3 @@
 # Cat Gym - CS
-    Server
-        Table t - (update, delete), ServerApp
-
-    Client
-        ?Handler, ClientApp
+    ClientApp, TrainerUpdateHandler 수정
+    구동 테스트, ServerApp 복습

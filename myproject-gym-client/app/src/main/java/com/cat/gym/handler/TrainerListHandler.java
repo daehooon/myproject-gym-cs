@@ -1,27 +1,30 @@
 package com.cat.gym.handler;
 
 import java.util.Iterator;
-import java.util.List;
-import com.cat.gym.domain.Trainer;
+import com.cat.driver.Statement;
 
-public class TrainerListHandler extends AbstractTrainerHandler {
+public class TrainerListHandler implements Command {
 
-  public TrainerListHandler(List<Trainer> trainerList) {
-    super(trainerList);
+  Statement stmt;
+
+  public TrainerListHandler(Statement stmt) {
+    this.stmt = stmt;
   }
 
   @Override
-  public void service() {
+  public void service() throws Exception {
     System.out.println("[트레이너 목록]");
     System.out.println();
 
-    Iterator<Trainer> iterator = trainerList.iterator();
+    Iterator<String> results = stmt.executeQuery("trainer/selectall");
 
-    while (iterator.hasNext()) {
-      Trainer t = iterator.next();
-      System.out.printf("%d %s %s\n", t.getNo(), t.getName(), t.getPhoneNumber());
+    while (results.hasNext()) {
+      String[] fields = results.next().split(",");
+      System.out.printf("%s, %s, %s\n",
+          fields[0],
+          fields[1],
+          fields[2]);
       System.out.println();
     }
   }
-
 }

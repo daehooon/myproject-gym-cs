@@ -1,42 +1,38 @@
 package com.cat.gym.handler;
 
-import java.util.List;
-import com.cat.gym.domain.Member;
+import com.cat.driver.Statement;
 import com.cat.util.Prompt;
 
-public class MemberDeleteHandler extends AbstractMemberHandler {
+public class MemberDeleteHandler implements Command {
 
-  public MemberDeleteHandler(List<Member> memberList) {
-    super(memberList);
+  Statement stmt;
+
+  public MemberDeleteHandler(Statement stmt) {
+    this.stmt = stmt;
   }
 
   @Override
-  public void service() {
+  public void service() throws Exception {
     System.out.println("[회원 탈퇴]");
     System.out.println();
 
-    String id = Prompt.inputString("아이디 확인: ");
+    int no = Prompt.inputInt("번호: ");
     System.out.println();
 
-    Member member = findById(id);
-    if (member == null) {
-      System.out.println("해당 아이디의 회원이 없습니다.");
-      System.out.println();
-      return;
-    }
+    stmt.executeQuery("member/select", Integer.toString(no));
 
     String input = Prompt.inputString("정말 탈퇴하시겠습니까?(y/N) ");
     System.out.println();
 
-    if (input.equalsIgnoreCase("Y")) {
-      memberList.remove(member);
-      System.out.println("회원을 탈퇴하였습니다.");
-      System.out.println();
-
-    } else {
+    if (!input.equalsIgnoreCase("Y")) {
       System.out.println("회원 탈퇴를 취소하였습니다.");
       System.out.println();
+      return;
     }
-  }
 
+    stmt.executeUpdate("member/delete", Integer.toString(no));
+
+    System.out.println("회원을 탈퇴하였습니다.");
+    System.out.println();
+  }
 }

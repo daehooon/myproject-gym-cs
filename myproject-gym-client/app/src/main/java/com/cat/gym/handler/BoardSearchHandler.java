@@ -1,18 +1,19 @@
 package com.cat.gym.handler;
 
-import java.util.ArrayList;
-import java.util.List;
-import com.cat.gym.domain.Board;
+import java.util.Iterator;
+import com.cat.driver.Statement;
 import com.cat.util.Prompt;
 
 public class BoardSearchHandler implements Command {
 
-  public BoardSearchHandler(List<Board> boardList) {
-    super(boardList);
+  Statement stmt;
+
+  public BoardSearchHandler(Statement stmt) {
+    this.stmt = stmt;
   }
 
   @Override
-  public void service() {
+  public void service() throws Exception {
     System.out.println("[게시글 검색]");
     System.out.println();
 
@@ -25,31 +26,24 @@ public class BoardSearchHandler implements Command {
       return;
     }
 
-    ArrayList<Board> list = new ArrayList<>();
+    Iterator<String> results = stmt.executeQuery("board/selectByKeyword", keyword);
 
-    Board[] boards = boardList.toArray(new Board[boardList.size()]);
-    for (Board b : boards) {
-      if (b.getTitle().contains(keyword) ||
-          b.getId().contains(keyword) ||
-          b.getContent().contains(keyword)) {
-        list.add(b);
-        System.out.println();
-      }
-    }
-
-    if (list.isEmpty()) {
+    if (!results.hasNext()) {
       System.out.println();
       System.out.println("해당 검색어의 게시글이 없습니다.");
       System.out.println();
       return;
     }
 
-    for (Board b : list) {
-      System.out.printf("%d %s %s %s %d\n",
-          b.getNo(), b.getTitle(), b.getId(),
-          b.getViewCount(), b.getLike());
+    while (results.hasNext()) {
+      String[] fields = results.next().split(",");
+      System.out.printf("%s, %s, %s, %s, %s\n",
+          fields[0],
+          fields[1],
+          fields[2],
+          fields[3],
+          fields[4]);
       System.out.println();
     }
   }
-
 }

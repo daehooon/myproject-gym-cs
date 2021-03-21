@@ -48,7 +48,7 @@ public class TrainerTable implements DataTable {
         break;
       case "trainer/selectall":
         for (Trainer p : list) {
-          response.appendData(String.format("%d,%s,%s", 
+          response.appendData(String.format("%s,%s,%s", 
               p.getNo(), p.getName(), p.getPhoneNumber()));
         }
         break;
@@ -67,7 +67,7 @@ public class TrainerTable implements DataTable {
               trainer.getContractE(),
               trainer.getMembers()));
         } else {
-          throw new Exception("해당 번호의 트레이너가 없습니다.")
+          throw new Exception("해당 번호의 트레이너가 없습니다.");
         }
         break;
       case "trainer/update":
@@ -78,11 +78,28 @@ public class TrainerTable implements DataTable {
           throw new Exception("해당 번호의 트레이너가 없습니다.");
         }
 
+        trainer.setBag(fields[1]);
+        trainer.setPhoto(fields[2]);
+        trainer.setName(fields[3]);
+        trainer.setPhoneNumber(fields[4]);
+        trainer.setContractE(Date.valueOf(fields[5]));
+        trainer.setMembers(fields[6]);
+
         JsonFileHandler.saveObjects(jsonFile, list);
         break;
       case "trainer/delete":
+        no = Integer.parseInt(request.getData().get(0));
+        trainer = getTrainer(no);
+        if (trainer == null) {
+          throw new Exception("해당 번호의 트레이너가 없습니다.");
+        }
+
+        list.remove(trainer);
+
         JsonFileHandler.saveObjects(jsonFile, list);
         break;
+      default:
+        throw new Exception("해당 명령을 처리할 수 없습니다.");
     }
   }
 
