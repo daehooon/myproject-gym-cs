@@ -36,12 +36,16 @@ public class TrainerUpdateHandler implements Command {
     System.out.println();
 
     if (!input.equalsIgnoreCase("Y")) {
-      System.out.println("정보 변경을 취소하였습니다.");
+      System.out.println("트레이너 정보 변경을 취소하였습니다.");
       System.out.println();
       return;
     }
 
-    System.out.println("정보를 변경하였습니다.");
+    stmt.executeUpdate("trainer/update",
+        String.format("%d,%s,%s,%s,%s,%s,%s",
+            no, bag, photo, name, phoneNumber, contractE, members));
+
+    System.out.println("트레이너 정보를 변경하였습니다.");
     System.out.println();
   }
 }
