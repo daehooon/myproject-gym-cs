@@ -125,6 +125,7 @@ public class ClientApp {
               stmt.executeUpdate("quit");
               System.out.println("득근하세요!! Ten Reps!!!");
               System.out.println();
+              return;
             default:
               Command commandHandler = commandMap.get(command);
 

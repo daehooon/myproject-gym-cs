@@ -20,7 +20,6 @@ public class TrainerAddHandler implements Command {
     System.out.println();
 
     Trainer t = new Trainer();
-    t.setNo(Prompt.inputInt("등록 번호: "));
     t.setBag(Prompt.inputString("전문분야: "));
     t.setPhoto(Prompt.inputString("사진: "));
     t.setName(Prompt.inputString("이름: "));
@@ -31,8 +30,7 @@ public class TrainerAddHandler implements Command {
     t.setMembers(memberValidator.inputMembers("PT회원 ID등록(완료: 빈 문자열): "));
 
     stmt.executeUpdate("trainer/insert",
-        String.format("%s,%s,%s,%s,%s,%s,%s,%s",
-            t.getNo(),
+        String.format("%s,%s,%s,%s,%s,%s,%s",
             t.getBag(),
             t.getPhoto(),
             t.getName(),
