@@ -57,7 +57,7 @@ public class TrainerTable implements DataTable {
 
         trainer = getTrainer(no);
         if (trainer != null) {
-          response.appendData(String.format(null, 
+          response.appendData(String.format("%d,%s,%s,%s,%s,%s,%s,%s", 
               trainer.getNo(),
               trainer.getBag(),
               trainer.getPhoto(),

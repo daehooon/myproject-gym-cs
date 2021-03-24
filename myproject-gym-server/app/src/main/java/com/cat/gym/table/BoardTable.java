@@ -33,8 +33,8 @@ public class BoardTable implements DataTable {
           board.setNo(1);
         }
 
-        board.setTitle(fields[0]);
-        board.setId(fields[1]);
+        board.setId(fields[0]);
+        board.setTitle(fields[1]);
         board.setRegisteredDate(new Date(System.currentTimeMillis()));
         board.setContent(fields[2]);
 

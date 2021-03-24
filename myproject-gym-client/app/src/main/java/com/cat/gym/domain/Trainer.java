@@ -23,7 +23,7 @@ public class Trainer {
     this.setPhoneNumber(fields[4]);
     this.setContractS(Date.valueOf(fields[5]));
     this.setContractE(Date.valueOf(fields[6]));
-    this.setMembers(fields[7]);
+    this.setMembers(fields[7].replace("|", ","));
   }
 
   @Override
@@ -42,7 +42,7 @@ public class Trainer {
         this.getPhoneNumber(), 
         this.getContractS(),
         this.getContractE(),
-        this.getMembers());
+        this.getMembers().replace(",", "|"));
   }
 
   public static Trainer valueOfCsv(String csv) {
@@ -55,7 +55,7 @@ public class Trainer {
     t.setPhoneNumber(fields[4]);
     t.setContractS(Date.valueOf(fields[5]));
     t.setContractE(Date.valueOf(fields[6]));
-    t.setMembers(fields[7]);
+    t.setMembers(fields[7].replace("|", ","));
     return t;
   }
 

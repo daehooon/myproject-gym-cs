@@ -50,7 +50,7 @@ public class PayTable implements DataTable {
 
         pay = getPay(id);
         if (pay != null) {
-          response.appendData(String.format("", 
+          response.appendData(String.format("%s,%s,%s,%s,%s,%s", 
               pay.getId(),
               pay.getSelect(),
               pay.getJoin(),

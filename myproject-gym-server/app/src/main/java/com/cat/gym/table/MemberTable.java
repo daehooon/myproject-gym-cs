@@ -84,6 +84,7 @@ public class MemberTable implements DataTable {
         } else {
           throw new Exception("해당 아이디의 회원이 없습니다.");
         }
+        break;
       case "member/update":
         fields = request.getData().get(0).split(",");
 
@@ -125,7 +126,7 @@ public class MemberTable implements DataTable {
     return null;
   }
 
-  protected Member getMemberById(String id) {
+  private Member getMemberById(String id) {
     for (Member m : list) {
       if (m.getId().equals(id)) {
         return m;
