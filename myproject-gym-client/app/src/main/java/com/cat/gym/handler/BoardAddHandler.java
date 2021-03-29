@@ -1,41 +1,35 @@
 package com.cat.gym.handler;
 
-import com.cat.driver.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import com.cat.gym.domain.Board;
 import com.cat.util.Prompt;
 
 public class BoardAddHandler implements Command {
 
-  Statement stmt;
-  MemberValidator memberValidator;
-
-  public BoardAddHandler(Statement stmt, MemberValidator memberValidator) {
-    this.stmt = stmt;
-    this.memberValidator = memberValidator;
-  }
-
   @Override
   public void service() throws Exception {
     System.out.println("[게시글 등록]");
-    System.out.println();
 
     Board b = new Board();
-    b.setId(memberValidator.inputMember("아이디(취소: 빈 문자열): "));
-    if (b.getId() == null) {
-      System.out.println();
-      System.out.println("게시글 등록을 취소합니다.");
-      System.out.println();
-      return;
-    }
+
     b.setTitle(Prompt.inputString("제목: "));
     b.setContent(Prompt.inputString("내용: "));
+    b.setContent(Prompt.inputString("작성자: "));
 
-    stmt.executeUpdate("board/insert",
-        String.format("%s,%s,%s", b.getId(), b.getTitle(), b.getContent()));
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "insert into gym_board(title, content, writer) values(?,?,?)")) {
 
-    System.out.println();
-    System.out.println("게시글을 등록하였습니다.");
-    System.out.println();
+      stmt.setString(1, b.getTitle());
+      stmt.setString(2, b.getContent());
+      stmt.setString(3, b.getWriter());
+
+      stmt.executeUpdate();
+
+      System.out.println("게시글을 등록하였습니다.");
+    }
   }
-
 }

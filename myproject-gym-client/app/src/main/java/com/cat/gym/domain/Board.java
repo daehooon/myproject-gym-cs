@@ -5,39 +5,39 @@ import java.sql.Date;
 public class Board {
   private int no;
   private String title;
-  private String id;
+  private String content;
+  private String writer;
   private Date registeredDate;
   private int viewCount;
-  private String content;
   private int like;
 
   public Board() {}
 
   public Board(String csv) {
-    String[] fields = csv.split(",");
+    String[] fields = csv.split(","); // 번호,제목,내용,작성자,등록일,조회수
     this.setNo(Integer.parseInt(fields[0]));
     this.setTitle(fields[1]);
-    this.setId(fields[2]);
-    this.setRegisteredDate(Date.valueOf(fields[3]));
-    this.setViewCount(Integer.parseInt(fields[4]));
-    this.setContent(fields[5]);
+    this.setContent(fields[2]);
+    this.setWriter(fields[3]);
+    this.setRegisteredDate(Date.valueOf(fields[4]));
+    this.setViewCount(Integer.parseInt(fields[5]));
   }
 
   @Override
   public String toString() {
-    return "Board [no=" + no + ", title=" + title + ", id=" + id + ", registeredDate="
-        + registeredDate + ", viewCount=" + viewCount + ", content=" + content + ", like=" + like
+    return "Board [no=" + no + ", title=" + title + ", content=" + content + ", writer=" + writer
+        + ", registeredDate=" + registeredDate + ", viewCount=" + viewCount + ", like=" + like
         + "]";
   }
 
   public String toCsvString() {
-    return String.format("%d,%s,%s,%s,%d,%s", 
-        this.getNo(), 
-        this.getTitle(), 
-        this.getId(), 
-        this.getRegisteredDate().toString(), 
-        this.getViewCount(), 
-        this.getContent());
+    return String.format("%d,%s,%s,%s,%s,%d", 
+        this.getNo(),
+        this.getTitle(),
+        this.getContent(),
+        this.getWriter(),
+        this.getRegisteredDate().toString(),
+        this.getViewCount());
   }
 
   public static Board valueOfCsv(String csv) {
@@ -45,10 +45,10 @@ public class Board {
     Board b = new Board();
     b.setNo(Integer.parseInt(fields[0]));
     b.setTitle(fields[1]);
-    b.setId(fields[2]);
-    b.setRegisteredDate(Date.valueOf(fields[3]));
-    b.setViewCount(Integer.parseInt(fields[4]));
-    b.setContent(fields[5]);
+    b.setContent(fields[2]);
+    b.setWriter(fields[3]);
+    b.setRegisteredDate(Date.valueOf(fields[4]));
+    b.setViewCount(Integer.parseInt(fields[5]));
     return b;
   }
 
@@ -56,13 +56,9 @@ public class Board {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((content == null) ? 0 : content.hashCode());
-    result = prime * result + ((id == null) ? 0 : id.hashCode());
-    result = prime * result + like;
     result = prime * result + no;
-    result = prime * result + ((registeredDate == null) ? 0 : registeredDate.hashCode());
     result = prime * result + ((title == null) ? 0 : title.hashCode());
-    result = prime * result + viewCount;
+    result = prime * result + ((writer == null) ? 0 : writer.hashCode());
     return result;
   }
 
@@ -75,31 +71,17 @@ public class Board {
     if (getClass() != obj.getClass())
       return false;
     Board other = (Board) obj;
-    if (content == null) {
-      if (other.content != null)
-        return false;
-    } else if (!content.equals(other.content))
-      return false;
-    if (id == null) {
-      if (other.id != null)
-        return false;
-    } else if (!id.equals(other.id))
-      return false;
-    if (like != other.like)
-      return false;
     if (no != other.no)
-      return false;
-    if (registeredDate == null) {
-      if (other.registeredDate != null)
-        return false;
-    } else if (!registeredDate.equals(other.registeredDate))
       return false;
     if (title == null) {
       if (other.title != null)
         return false;
     } else if (!title.equals(other.title))
       return false;
-    if (viewCount != other.viewCount)
+    if (writer == null) {
+      if (other.writer != null)
+        return false;
+    } else if (!writer.equals(other.writer))
       return false;
     return true;
   }
@@ -116,11 +98,17 @@ public class Board {
   public void setTitle(String title) {
     this.title = title;
   }
-  public String getId() {
-    return id;
+  public String getContent() {
+    return content;
   }
-  public void setId(String id) {
-    this.id = id;
+  public void setContent(String content) {
+    this.content = content;
+  }
+  public String getWriter() {
+    return writer;
+  }
+  public void setWriter(String writer) {
+    this.writer = writer;
   }
   public Date getRegisteredDate() {
     return registeredDate;
@@ -133,12 +121,6 @@ public class Board {
   }
   public void setViewCount(int viewCount) {
     this.viewCount = viewCount;
-  }
-  public String getContent() {
-    return content;
-  }
-  public void setContent(String content) {
-    this.content = content;
   }
   public int getLike() {
     return like;
