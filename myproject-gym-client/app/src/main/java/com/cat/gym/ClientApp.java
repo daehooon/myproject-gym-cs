@@ -11,6 +11,12 @@ import com.cat.gym.handler.BoardListHandler;
 import com.cat.gym.handler.BoardSearchHandler;
 import com.cat.gym.handler.BoardUpdateHandler;
 import com.cat.gym.handler.Command;
+import com.cat.gym.handler.MemberAddHandler;
+import com.cat.gym.handler.MemberDeleteHandler;
+import com.cat.gym.handler.MemberDetailHandler;
+import com.cat.gym.handler.MemberListHandler;
+import com.cat.gym.handler.MemberUpdateHandler;
+import com.cat.gym.handler.MemberValidator;
 import com.cat.util.Prompt;
 
 public class ClientApp {
@@ -49,14 +55,14 @@ public class ClientApp {
     commandMap.put("/board/delete", new BoardDeleteHandler());
     commandMap.put("/board/search", new BoardSearchHandler());
 
-    //    commandMap.put("/member/add", new MemberAddHandler(stmt));
-    //    commandMap.put("/member/list", new MemberListHandler(stmt));
-    //    commandMap.put("/member/detail", new MemberDetailHandler(stmt));
-    //    commandMap.put("/member/update", new MemberUpdateHandler(stmt));
-    //    commandMap.put("/member/delete", new MemberDeleteHandler(stmt));
-    //
-    //    MemberValidator memberValidator = new MemberValidator(stmt);
-    //
+    commandMap.put("/member/add", new MemberAddHandler());
+    commandMap.put("/member/list", new MemberListHandler());
+    commandMap.put("/member/detail", new MemberDetailHandler());
+    commandMap.put("/member/update", new MemberUpdateHandler());
+    commandMap.put("/member/delete", new MemberDeleteHandler());
+
+    MemberValidator memberValidator = new MemberValidator();
+
     //    commandMap.put("/pay/add", new PayAddHandler(stmt, memberValidator));
     //    commandMap.put("/pay/list", new PayListHandler(stmt));
     //    commandMap.put("/pay/detail", new PayDetailHandler(stmt));
@@ -79,7 +85,7 @@ public class ClientApp {
             + "|-----------------------------------------------------------------------|\n"
             + "|  [트레이너] = /trainer  [최근 입력 기록] = history(or 2)              |\n"
             + "|-----------------------------------------------------------------------|\n"
-            + "|  [세부 메뉴] */add list detail update delete search  EX) /member/add  |\n"
+            + "|  [세부 메뉴] .../add list detail update delete (/board/search)        |\n"
             + "|-----------------------------------------------------------------------|\n"
             + "|  [프로그램 종료] = EXIT                                               |\n"
             + "|-----------------------------------------------------------------------|\n"

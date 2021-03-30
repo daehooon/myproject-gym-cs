@@ -1,47 +1,64 @@
 package com.cat.gym.handler;
 
-import com.cat.driver.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import com.cat.gym.domain.Member;
 import com.cat.util.Prompt;
 
 public class MemberUpdateHandler implements Command {
 
-  Statement stmt;
-
-  public MemberUpdateHandler(Statement stmt) {
-    this.stmt = stmt;
-  }
-
   @Override
   public void service() throws Exception {
     System.out.println("[회원 정보 변경]");
-    System.out.println();
 
-    int no = Prompt.inputInt("번호: ");
-    System.out.println();
+    int no = Prompt.inputInt("회원번호: ");
 
-    String[] fields = stmt.executeQuery("member/select", Integer.toString(no)).next().split(",");
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "select * from gym_member where no = ?");
+        PreparedStatement stmt2 = con.prepareStatement(
+            "update gym_member set name=?,email=?,password=password(?),photo=?,tel=? where no=?")) {
 
-    String name = Prompt.inputString(String.format("이름(%s): ", fields[1]));
-    String phoneNumber = Prompt.inputString(String.format("전화번호(%s): ", fields[2]));
-    String residence = Prompt.inputString(String.format("주소(%s): ", fields[3]));
-    String id = Prompt.inputString(String.format("아이디(%s): ", fields[4]));
-    String password = Prompt.inputString(String.format("비밀번호(%s): ", fields[5]));
+      Member member = new Member();
 
-    System.out.println();
-    String input = Prompt.inputString("정말 변경하시겠습니까?(y/N) ");
-    System.out.println();
+      stmt.setInt(1, no);
+      try (ResultSet rs = stmt.executeQuery()) {
+        if (!rs.next()) {
+          System.out.println("해당 번호의 회원이 없습니다.");
+          return;
+        }
 
-    if (!input.equalsIgnoreCase("Y")) {
-      System.out.println("회원 정보 변경을 취소하였습니다.");
-      System.out.println();
-      return;
+        member.setNo(no); 
+        member.setName(rs.getString("name"));
+        member.setEmail(rs.getString("email"));
+        member.setPhoto(rs.getString("photo"));
+        member.setTel(rs.getString("tel"));
+      }
+
+      member.setName(Prompt.inputString(String.format("이름(%s): ", member.getName())));
+      member.setEmail(Prompt.inputString(String.format("이메일(%s): ", member.getEmail())));
+      member.setPassword(Prompt.inputString("새 암호: "));
+      member.setPhoto(Prompt.inputString(String.format("사진(%s): ", member.getPhoto())));
+      member.setTel(Prompt.inputString(String.format("전화(%s): ", member.getTel())));
+
+      String input = Prompt.inputString("정말 변경하시겠습니까?(y/N) ");
+      if (!input.equalsIgnoreCase("Y")) {
+        System.out.println("회원 정보 변경을 취소하였습니다.");
+        return;
+      }
+
+      stmt2.setString(1, member.getName());
+      stmt2.setString(2, member.getEmail());
+      stmt2.setString(3, member.getPassword());
+      stmt2.setString(4, member.getPhoto());
+      stmt2.setString(5, member.getTel());
+      stmt2.setInt(6, member.getNo());
+      stmt2.executeUpdate();
+
+      System.out.println("회원 정보를 변경하였습니다.");
     }
-
-    stmt.executeUpdate("member/update",
-        String.format("%d,%s,%s,%s,%s,%s",
-            no, name, phoneNumber, residence, id, password));
-
-    System.out.println("회원 정보를 변경하였습니다.");
-    System.out.println();
   }
 }

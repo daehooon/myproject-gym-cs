@@ -11,9 +11,9 @@ public class MemberValidator {
   public String inputMember(String promptTitle) throws Exception {
 
     try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:2222/studydb?user=study&password=1111");
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
-            "select count(*) from pms_member where name=?")) {
+            "select count(*) from gym_member where name=?")) {
 
       while (true) {
         String name = Prompt.inputString(promptTitle);
@@ -27,7 +27,7 @@ public class MemberValidator {
           if (rs.getInt(1) > 0) {
             return name;
           }
-          System.out.println("등록된 회원이 아닙니다.");
+          System.out.println("등록되지 않은 회원입니다.");
         }
       }
     }

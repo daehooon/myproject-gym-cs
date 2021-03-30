@@ -3,7 +3,8 @@ package com.cat.gym.domain;
 import java.sql.Date;
 
 public class Pay {
-  private String id;
+  private int no;
+  private String name;
   private int select;
   private String join;
   private String rental;

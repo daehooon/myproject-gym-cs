@@ -5,11 +5,11 @@ import java.sql.Date;
 public class Member {
   private int no;
   private String name;
-  private String phoneNumber;
-  private String residence;
-  private String id;
+  private String email;
   private String password;
-  private Date apply;
+  private String photo;
+  private String tel;
+  private Date registeredDate;
 
   public Member() {}
 
@@ -17,54 +17,50 @@ public class Member {
     String[] fields = csv.split(",");
     this.setNo(Integer.parseInt(fields[0]));
     this.setName(fields[1]);
-    this.setPhoneNumber(fields[2]);
-    this.setResidence(fields[3]);
-    this.setId(fields[4]);
-    this.setPassword(fields[5]);
-    this.setApply(Date.valueOf(fields[6]));
+    this.setEmail(fields[2]);
+    this.setPassword(fields[3]);
+    this.setPhoto(fields[4]);
+    this.setTel(fields[5]);
+    this.setRegisteredDate(Date.valueOf(fields[6]));
   }
 
   @Override
   public String toString() {
-    return "Member [no=" + no + ", name=" + name + ", phoneNumber=" + phoneNumber + ", residence="
-        + residence + ", id=" + id + ", password=" + password + ", apply=" + apply + "]";
+    return "Member [no=" + no + ", name=" + name + ", email=" + email + ", password=" + password
+        + ", photo=" + photo + ", tel=" + tel + ", registeredDate=" + registeredDate + "]";
   }
 
   public String toCsvString() {
-    return String.format("%d,%s,%s,%s,%s,%s,%s",
+    return String.format("%d,%s,%s,%s,%s,%s,%s", 
         this.getNo(),
-        this.getName(), 
-        this.getPhoneNumber(), 
-        this.getResidence(), 
-        this.getId(), 
-        this.getPassword(), 
-        this.getApply());
+        this.getName(),
+        this.getEmail(),
+        this.getPassword(),
+        this.getPhoto(),
+        this.getTel(),
+        this.getRegisteredDate());
   }
 
   public static Member valueOfCsv(String csv) {
     String[] fields = csv.split(",");
-    Member m = new Member();
-    m.setNo(Integer.parseInt(fields[0]));
-    m.setName(fields[1]);
-    m.setPhoneNumber(fields[2]);
-    m.setResidence(fields[3]);
-    m.setId(fields[4]);
-    m.setPassword(fields[5]);
-    m.setApply(Date.valueOf(fields[6]));
-    return m;
+    Member member = new Member();
+    member.setNo(Integer.parseInt(fields[0]));
+    member.setName(fields[1]);
+    member.setEmail(fields[2]);
+    member.setPassword(fields[3]);
+    member.setPhoto(fields[4]);
+    member.setTel(fields[5]);
+    member.setRegisteredDate(Date.valueOf(fields[6]));
+    return member;
   }
 
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((apply == null) ? 0 : apply.hashCode());
-    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    result = prime * result + ((email == null) ? 0 : email.hashCode());
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     result = prime * result + no;
-    result = prime * result + ((password == null) ? 0 : password.hashCode());
-    result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
-    result = prime * result + ((residence == null) ? 0 : residence.hashCode());
     return result;
   }
 
@@ -77,15 +73,10 @@ public class Member {
     if (getClass() != obj.getClass())
       return false;
     Member other = (Member) obj;
-    if (apply == null) {
-      if (other.apply != null)
+    if (email == null) {
+      if (other.email != null)
         return false;
-    } else if (!apply.equals(other.apply))
-      return false;
-    if (id == null) {
-      if (other.id != null)
-        return false;
-    } else if (!id.equals(other.id))
+    } else if (!email.equals(other.email))
       return false;
     if (name == null) {
       if (other.name != null)
@@ -93,21 +84,6 @@ public class Member {
     } else if (!name.equals(other.name))
       return false;
     if (no != other.no)
-      return false;
-    if (password == null) {
-      if (other.password != null)
-        return false;
-    } else if (!password.equals(other.password))
-      return false;
-    if (phoneNumber == null) {
-      if (other.phoneNumber != null)
-        return false;
-    } else if (!phoneNumber.equals(other.phoneNumber))
-      return false;
-    if (residence == null) {
-      if (other.residence != null)
-        return false;
-    } else if (!residence.equals(other.residence))
       return false;
     return true;
   }
@@ -124,23 +100,11 @@ public class Member {
   public void setName(String name) {
     this.name = name;
   }
-  public String getPhoneNumber() {
-    return phoneNumber;
+  public String getEmail() {
+    return email;
   }
-  public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
-  }
-  public String getResidence() {
-    return residence;
-  }
-  public void setResidence(String residence) {
-    this.residence = residence;
-  }
-  public String getId() {
-    return id;
-  }
-  public void setId(String id) {
-    this.id = id;
+  public void setEmail(String email) {
+    this.email = email;
   }
   public String getPassword() {
     return password;
@@ -148,10 +112,22 @@ public class Member {
   public void setPassword(String password) {
     this.password = password;
   }
-  public Date getApply() {
-    return apply;
+  public String getPhoto() {
+    return photo;
   }
-  public void setApply(Date apply) {
-    this.apply = apply;
+  public void setPhoto(String photo) {
+    this.photo = photo;
   }
+  public String getTel() {
+    return tel;
+  }
+  public void setTel(String tel) {
+    this.tel = tel;
+  }
+  public Date getRegisteredDate() {
+    return registeredDate;
+  }
+  public void setRegisteredDate(Date registeredDate) {
+    this.registeredDate = registeredDate;
+  } 
 }

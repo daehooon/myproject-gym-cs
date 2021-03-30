@@ -36,8 +36,8 @@ public class BoardUpdateHandler implements Command {
         board.setContent(rs.getString("content"));
       }
 
-      board.setTitle(Prompt.inputString(String.format("제목(%s)? ", board.getTitle())));
-      board.setContent(Prompt.inputString(String.format("내용(%s)? ", board.getContent())));
+      board.setTitle(Prompt.inputString(String.format("제목(%s): ", board.getTitle())));
+      board.setContent(Prompt.inputString(String.format("내용(%s): ", board.getContent())));
 
       String input = Prompt.inputString("정말 수정하시겠습니까?(y/N) ");
       if (!input.equalsIgnoreCase("Y")) {

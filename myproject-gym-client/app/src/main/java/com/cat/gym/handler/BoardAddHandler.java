@@ -16,7 +16,7 @@ public class BoardAddHandler implements Command {
 
     b.setTitle(Prompt.inputString("제목: "));
     b.setContent(Prompt.inputString("내용: "));
-    b.setContent(Prompt.inputString("작성자: "));
+    b.setWriter(Prompt.inputString("작성자: "));
 
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
