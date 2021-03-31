@@ -1,37 +1,36 @@
 package com.cat.gym.handler;
 
-import com.cat.driver.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import com.cat.util.Prompt;
 
 public class TrainerDeleteHandler implements Command {
 
-  Statement stmt;
-
-  public TrainerDeleteHandler(Statement stmt) {
-    this.stmt = stmt;
-  }
-
   @Override
   public void service() throws Exception {
     System.out.println("[트레이너 삭제]");
-    System.out.println();
 
-    int no = Prompt.inputInt("등록 번호: ");
-
-    stmt.executeQuery("trainer/select", Integer.toString(no));
+    int no = Prompt.inputInt("트레이너 번호: ");
 
     String input = Prompt.inputString("정말 삭제하시겠습니까?(y/N) ");
-    System.out.println();
-
     if (!input.equalsIgnoreCase("Y")) {
       System.out.println("트레이너 삭제를 취소하였습니다.");
-      System.out.println();
       return;
     }
 
-    stmt.executeUpdate("trainer/delete", Integer.toString(no));
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "delete from gym_trainer where no=?")) {
 
-    System.out.println("트레이너를 삭제하였습니다.");
-    System.out.println();
+      stmt.setInt(1, no);
+
+      if (stmt.executeUpdate() == 0) {
+        System.out.println("해당 번호의 트레이너가 없습니다.");
+      } else {
+        System.out.println("트레이너를 삭제하였습니다.");
+      }
+    }
   }
 }

@@ -17,6 +17,16 @@ import com.cat.gym.handler.MemberDetailHandler;
 import com.cat.gym.handler.MemberListHandler;
 import com.cat.gym.handler.MemberUpdateHandler;
 import com.cat.gym.handler.MemberValidator;
+import com.cat.gym.handler.PayAddHandler;
+import com.cat.gym.handler.PayDeleteHandler;
+import com.cat.gym.handler.PayDetailHandler;
+import com.cat.gym.handler.PayListHandler;
+import com.cat.gym.handler.PayUpdateHandler;
+import com.cat.gym.handler.TrainerAddHandler;
+import com.cat.gym.handler.TrainerDeleteHandler;
+import com.cat.gym.handler.TrainerDetailHandler;
+import com.cat.gym.handler.TrainerListHandler;
+import com.cat.gym.handler.TrainerUpdateHandler;
 import com.cat.util.Prompt;
 
 public class ClientApp {
@@ -63,17 +73,17 @@ public class ClientApp {
 
     MemberValidator memberValidator = new MemberValidator();
 
-    //    commandMap.put("/pay/add", new PayAddHandler(stmt, memberValidator));
-    //    commandMap.put("/pay/list", new PayListHandler(stmt));
-    //    commandMap.put("/pay/detail", new PayDetailHandler(stmt));
-    //    commandMap.put("/pay/update", new PayUpdateHandler(stmt));
-    //    commandMap.put("/pay/delete", new PayDeleteHandler(stmt));
-    //
-    //    commandMap.put("/trainer/add", new TrainerAddHandler(stmt, memberValidator));
-    //    commandMap.put("/trainer/list", new TrainerListHandler(stmt));
-    //    commandMap.put("/trainer/detail", new TrainerDetailHandler(stmt));
-    //    commandMap.put("/trainer/update", new TrainerUpdateHandler(stmt, memberValidator));
-    //    commandMap.put("/trainer/delete", new TrainerDeleteHandler(stmt));
+    commandMap.put("/pay/add", new PayAddHandler(memberValidator));
+    commandMap.put("/pay/list", new PayListHandler());
+    commandMap.put("/pay/detail", new PayDetailHandler());
+    commandMap.put("/pay/update", new PayUpdateHandler());
+    commandMap.put("/pay/delete", new PayDeleteHandler());
+
+    commandMap.put("/trainer/add", new TrainerAddHandler(memberValidator));
+    commandMap.put("/trainer/list", new TrainerListHandler());
+    commandMap.put("/trainer/detail", new TrainerDetailHandler());
+    commandMap.put("/trainer/update", new TrainerUpdateHandler(memberValidator));
+    commandMap.put("/trainer/delete", new TrainerDeleteHandler());
 
     try {
       while (true) {

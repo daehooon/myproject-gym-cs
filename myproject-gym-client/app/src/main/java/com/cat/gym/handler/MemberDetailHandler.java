@@ -17,7 +17,7 @@ public class MemberDetailHandler implements Command {
     try (Connection con = DriverManager.getConnection( //
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement( //
-            "select * from gym_member where no = ?")) {
+            "select * from gym_member where no=?")) {
 
       stmt.setInt(1, no);
 

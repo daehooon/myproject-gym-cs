@@ -1,26 +1,9 @@
 # Cat Gym - CS
 
 ### Notice
+    ● 30-b-client ~ d, 31-c 까지 만들기
 
 ## Patch List
-    ● memberValidator 버그 (add)
-    ● 트레이너 등록시 pt회원 미기입시 오류 발생
-        (null 가능으로 바꾸기)
-    ● 질문 통일
-
-    /board/add
-    id 기입하면 이름으로 출력됨
-
-    /trainer/detail
-    PT회원 ID목록 한명만 출력됨
-    /trainer/update
-    계약 종료일(시작일이 나옴),
-    현재 PT회원 ...(종료일이 나옴)
-    /trainer/delete, add
-    삭제된 번호가 다시 생성됨
-
-    /pay/...
-    잔 버그 많음
 
 ## Patch Note
 
@@ -65,15 +48,16 @@ alter table gym_member
     add constraint gym_member_uk unique (email);
 ```
 
-<!-- ```
+```
 create table gym_pay(
     no int not null,
-    name varchar(30) not null,
-    select int not null,
-    join varchar(10) not null,
-    rental varchar(10) not null,
-    locker varchar(10) not null,
-    sdt date not null,
+    mrn varchar(30) not null,
+    mrs int not null default 0,
+    nmr int not null default 0,
+    rental int not null default 0,
+    locker int not null default 0,
+    pt int not null default 0,
+    sdt date not null default now(),
     edt date not null
 );
 
@@ -82,4 +66,23 @@ alter table gym_pay
 
 alter table gym_pay
     modify column no int not null auto_increment;
-``` --> 
+```
+
+```
+create table gym_trainer(
+    no int not null,
+    bag varchar(30),
+    photo varchar(255) not null,
+    name varchar(30) not null,
+    tel varchar(20) not null,
+    cts date not null,
+    cte date not null,
+    members varchar(255)
+);
+
+alter table gym_trainer
+    add constraint gym_trainer_pk primary key(no);
+
+alter table gym_trainer
+    modify column no int not null auto_increment;
+```

@@ -1,29 +1,32 @@
 package com.cat.gym.handler;
 
-import java.util.Iterator;
-import com.cat.driver.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import com.cat.gym.domain.Pay;
 
 public class PayListHandler implements Command {
 
-  Statement stmt;
-
-  public PayListHandler(Statement stmt) {
-    this.stmt = stmt;
-  }
-
   @Override
   public void service() throws Exception {
     System.out.println("[결제/예약 목록]");
-    System.out.println();
 
-    Iterator<String> results = stmt.executeQuery("pay/selectall");
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "select no,mrn,mrs,pt,sdt,edt from gym_pay order by mrn asc");
+        ResultSet rs = stmt.executeQuery()) {
 
-    while (results.hasNext()) {
-      String[] fields = results.next().split(",");
-      System.out.printf("%s, %s, %s\n",
-          fields[0], Pay.getSelectLabel(Integer.parseInt(fields[1])), fields[2]);
-      System.out.println();
+      while (rs.next()) {
+        System.out.printf("%d, %s, %s, %s, %s, %s\n",
+            rs.getInt("no"),
+            rs.getString("mrn"),
+            Pay.getMembershipLabel(rs.getInt("mrs")),
+            Pay.getPtLabel(rs.getInt("pt")),
+            rs.getDate("sdt"),
+            rs.getDate("edt"));
+      }
     }
   }
 }

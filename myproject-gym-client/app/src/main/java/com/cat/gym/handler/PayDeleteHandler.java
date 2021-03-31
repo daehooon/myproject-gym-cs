@@ -1,37 +1,36 @@
 package com.cat.gym.handler;
 
-import com.cat.driver.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import com.cat.util.Prompt;
 
 public class PayDeleteHandler implements Command {
 
-  Statement stmt;
-
-  public PayDeleteHandler(Statement stmt) {
-    this.stmt = stmt;
-  }
-
   @Override
   public void service() throws Exception {
-    System.out.println("[결제/예약 취소]");
-    System.out.println();
+    System.out.println("[결제/예약 삭제]");
 
-    String id = Prompt.inputString("아이디: ");
+    int no = Prompt.inputInt("결제/예약 번호: ");
 
-    stmt.executeQuery("pay/select", id);
-
-    String input = Prompt.inputString("정말 취소하시겠습니까?(y/N) ");
-    System.out.println();
-
+    String input = Prompt.inputString("정말 삭제하시겠습니까?(y/N) ");
     if (!input.equalsIgnoreCase("Y")) {
-      System.out.println("결제/예약 취소가 진행되지 않았습니다.");
-      System.out.println();
+      System.out.println("결제/예약 삭제를 취소하였습니다.");
       return;
     }
 
-    stmt.executeUpdate("pay/delete", id);
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "delete from gym_pay where no=?")){
 
-    System.out.println("결제/예약을 취소하였습니다.");
-    System.out.println();
+      stmt.setInt(1, no);
+
+      if (stmt.executeUpdate() == 0) {
+        System.out.println("해당 번호의 결제/예약이 없습니다.");
+      } else {
+        System.out.println("결제/예약을 삭제하였습니다.");        
+      }
+    }
   }
 }

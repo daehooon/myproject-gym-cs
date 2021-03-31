@@ -4,50 +4,62 @@ import java.sql.Date;
 
 public class Pay {
   private int no;
-  private String name;
-  private int select;
-  private String join;
-  private String rental;
-  private String locker;
+  private String memberName;
+  private int membership;
+  private int newMember;
+  private int rental;
+  private int locker;
+  private int pt;
   private Date startDate;
+  private Date endDate;
 
   public Pay() {}
 
   public Pay(String csv) {
     String[] fields = csv.split(",");
-    this.setId(fields[0]);
-    this.setSelect(Integer.parseInt(fields[1]));
-    this.setJoin(fields[2]);
-    this.setRental(fields[3]);
-    this.setLocker(fields[4]);
-    this.setStartDate(Date.valueOf(fields[5]));
+    this.setNo(Integer.parseInt(fields[0]));
+    this.setMemberName(fields[1]);
+    this.setMembership(Integer.parseInt(fields[2]));
+    this.setNewMember(Integer.parseInt(fields[3]));
+    this.setRental(Integer.parseInt(fields[4]));
+    this.setLocker(Integer.parseInt(fields[5]));
+    this.setPt(Integer.parseInt(fields[6]));
+    this.setStartDate(Date.valueOf(fields[7]));
+    this.setEndDate(Date.valueOf(fields[8]));
   }
 
   @Override
   public String toString() {
-    return "Pay [id=" + id + ", select=" + select + ", join=" + join + ", rental=" + rental
-        + ", locker=" + locker + ", startDate=" + startDate + "]";
+    return "Pay [no=" + no + ", memberName=" + memberName + ", membership=" + membership
+        + ", newMember=" + newMember + ", rental=" + rental + ", locker=" + locker + ", pt=" + pt
+        + ", startDate=" + startDate + ", endDate=" + endDate + "]";
   }
 
   public String toCsvString() {
-    return String.format("%s,%d,%s,%s,%s,%s", 
-        this.getId(), 
-        this.getSelect(), 
-        this.getJoin(), 
+    return String.format("%d,%s,%d,%d,%d,%d,%d,%s,%s", 
+        this.getNo(), 
+        this.getMemberName(), 
+        this.getMembership(),
+        this.getNewMember(),
         this.getRental(), 
         this.getLocker(), 
-        this.getStartDate());
+        this.getPt(),
+        this.getStartDate(),
+        this.getEndDate());
   }
 
   public static Pay valueOfCsv(String csv) {
     String[] fields = csv.split(",");
     Pay p = new Pay();
-    p.setId(fields[0]);
-    p.setSelect(Integer.parseInt(fields[1]));
-    p.setJoin(fields[2]);
-    p.setRental(fields[3]);
-    p.setLocker(fields[4]);
-    p.setStartDate(Date.valueOf(fields[5]));
+    p.setNo(Integer.parseInt(fields[0]));
+    p.setMemberName(fields[1]);
+    p.setMembership(Integer.parseInt(fields[2]));
+    p.setNewMember(Integer.parseInt(fields[3]));
+    p.setRental(Integer.parseInt(fields[4]));
+    p.setLocker(Integer.parseInt(fields[5]));
+    p.setPt(Integer.parseInt(fields[6]));
+    p.setStartDate(Date.valueOf(fields[7]));
+    p.setEndDate(Date.valueOf(fields[8]));
     return p;
   }
 
@@ -55,11 +67,14 @@ public class Pay {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((id == null) ? 0 : id.hashCode());
-    result = prime * result + ((join == null) ? 0 : join.hashCode());
-    result = prime * result + ((locker == null) ? 0 : locker.hashCode());
-    result = prime * result + ((rental == null) ? 0 : rental.hashCode());
-    result = prime * result + select;
+    result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
+    result = prime * result + locker;
+    result = prime * result + ((memberName == null) ? 0 : memberName.hashCode());
+    result = prime * result + membership;
+    result = prime * result + newMember;
+    result = prime * result + no;
+    result = prime * result + pt;
+    result = prime * result + rental;
     result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
     return result;
   }
@@ -73,27 +88,27 @@ public class Pay {
     if (getClass() != obj.getClass())
       return false;
     Pay other = (Pay) obj;
-    if (id == null) {
-      if (other.id != null)
+    if (endDate == null) {
+      if (other.endDate != null)
         return false;
-    } else if (!id.equals(other.id))
+    } else if (!endDate.equals(other.endDate))
       return false;
-    if (join == null) {
-      if (other.join != null)
+    if (locker != other.locker)
+      return false;
+    if (memberName == null) {
+      if (other.memberName != null)
         return false;
-    } else if (!join.equals(other.join))
+    } else if (!memberName.equals(other.memberName))
       return false;
-    if (locker == null) {
-      if (other.locker != null)
-        return false;
-    } else if (!locker.equals(other.locker))
+    if (membership != other.membership)
       return false;
-    if (rental == null) {
-      if (other.rental != null)
-        return false;
-    } else if (!rental.equals(other.rental))
+    if (newMember != other.newMember)
       return false;
-    if (select != other.select)
+    if (no != other.no)
+      return false;
+    if (pt != other.pt)
+      return false;
+    if (rental != other.rental)
       return false;
     if (startDate == null) {
       if (other.startDate != null)
@@ -103,35 +118,47 @@ public class Pay {
     return true;
   }
 
-  public String getId() {
-    return id;
+  public int getNo() {
+    return no;
   }
-  public void setId(String id) {
-    this.id = id;
+  public void setNo(int no) {
+    this.no = no;
   }
-  public int getSelect() {
-    return select;
+  public String getMemberName() {
+    return memberName;
   }
-  public void setSelect(int select) {
-    this.select = select;
+  public void setMemberName(String memberName) {
+    this.memberName = memberName;
   }
-  public String getJoin() {
-    return join;
+  public int getMembership() {
+    return membership;
   }
-  public void setJoin(String join) {
-    this.join = join;
+  public void setMembership(int membership) {
+    this.membership = membership;
   }
-  public String getRental() {
+  public int getNewMember() {
+    return newMember;
+  }
+  public void setNewMember(int newMember) {
+    this.newMember = newMember;
+  }
+  public int getRental() {
     return rental;
   }
-  public void setRental(String rental) {
+  public void setRental(int rental) {
     this.rental = rental;
   }
-  public String getLocker() {
+  public int getLocker() {
     return locker;
   }
-  public void setLocker(String locker) {
+  public void setLocker(int locker) {
     this.locker = locker;
+  }
+  public int getPt() {
+    return pt;
+  }
+  public void setPt(int pt) {
+    this.pt = pt;
   }
   public Date getStartDate() {
     return startDate;
@@ -139,11 +166,15 @@ public class Pay {
   public void setStartDate(Date startDate) {
     this.startDate = startDate;
   }
+  public Date getEndDate() {
+    return endDate;
+  }
+  public void setEndDate(Date endDate) {
+    this.endDate = endDate;
+  }
 
-  public static String getSelectLabel(int select) {
+  public static String getMembershipLabel(int select) {
     switch (select) {
-      case 0:
-        return "1개월(80,000원)";
       case 1:
         return "3개월(90,000원)";
       case 2:
@@ -151,7 +182,55 @@ public class Pay {
       case 3:
         return "1년(240,000원)";
       default:
-        return null;
+        return "1개월(80,000원)";
+    }
+  }
+
+  public static String getNewMemberLabel(int select) {
+    switch (select) {
+      case 1:
+        return "Y";
+      default:
+        return "N";
+    }
+  }
+
+  public static String getRentalLabel(int select) {
+    switch (select) {
+      case 1:
+        return "Y";
+      default:
+        return "N";
+    }
+  }
+
+  public static String getLockerLabel(int select) {
+    switch (select) {
+      case 1:
+        return "Y";
+      default:
+        return "N";
+    }
+  }
+
+  public static String getPtLabel(int select) {
+    switch (select) {
+      case 1:
+        return "Y";
+      default:
+        return "N";
     }
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
