@@ -18,9 +18,9 @@ public class PayUpdateHandler implements Command {
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
-            "select no,rental,locker,pt,sdt from gym_pay where no=?");
+            "select no,rental,locker,pt,sdt,edt from gym_pay where no=?");
         PreparedStatement stmt2 = con.prepareStatement(
-            "update gym_pay set rental=?,locker=?,pt=?,sdt=? where no=?")) {
+            "update gym_pay set rental=?,locker=?,pt=?,sdt=?,edt=? where no=?")) {
 
       Pay pay = new Pay();
 
@@ -37,6 +37,7 @@ public class PayUpdateHandler implements Command {
         pay.setLocker(rs.getInt("locker"));
         pay.setPt(rs.getInt("pt"));
         pay.setStartDate(rs.getDate("sdt"));
+        pay.setEndDate(rs.getDate("edt"));
       }
 
       pay.setRental(Prompt.inputInt(String.format(
@@ -44,9 +45,11 @@ public class PayUpdateHandler implements Command {
       pay.setLocker(Prompt.inputInt(String.format(
           "개인 락커 대여(%s) (0: No | 1: Yes): ", Pay.getLockerLabel(pay.getLocker()))));
       pay.setPt(Prompt.inputInt(String.format(
-          "PT 예약(%s) (0: No | 1: Yes): ", Pay.getPtLabel(pay.getRental()))));
+          "PT 예약(%s) (0: No | 1: Yes): ", Pay.getPtLabel(pay.getPt()))));
       pay.setStartDate(Prompt.inputDate(String.format(
           "운동 시작일(%s): ", pay.getStartDate())));
+      pay.setEndDate(Prompt.inputDate(String.format(
+          "운동 종료일(%s): ", pay.getEndDate())));
 
       String input = Prompt.inputString("정말 변경하시겠습니까?(y/N) ");
       if (!input.equalsIgnoreCase("Y")) {
@@ -58,7 +61,8 @@ public class PayUpdateHandler implements Command {
       stmt2.setInt(2, pay.getLocker());
       stmt2.setInt(3, pay.getPt());
       stmt2.setDate(4, pay.getStartDate());
-      stmt2.setInt(5, pay.getNo());
+      stmt2.setDate(5, pay.getEndDate());
+      stmt2.setInt(6, pay.getNo());
       stmt2.executeUpdate();
 
       System.out.println("결제/예약을 변경하였습니다.");
