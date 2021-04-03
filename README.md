@@ -1,7 +1,7 @@
 # Cat Gym - CS
 
 ### Notice
-    ● 30-c-client ~ d, 31-c 까지 만들기
+    ● 30-c-client ~ d, 31-c 까지 만들기 
 
 ## Patch List
 
