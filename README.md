@@ -1,7 +1,7 @@
 # Cat Gym - CS
 
 ### Notice
-    ● 30-c-client ~ d, 31-c 까지 만들기
+    ● 30-c-client(2단계) ~ d, 31-c 까지 만들기
 
 ## Patch List
 
@@ -51,7 +51,7 @@ alter table gym_member
 ```
 create table gym_pay(
     no int not null,
-    mrn varchar(30) not null,
+    mrn int not null,
     mrs int not null default 0,
     nmr int not null default 0,
     rental int not null default 0,
@@ -66,6 +66,9 @@ alter table gym_pay
 
 alter table gym_pay
     modify column no int not null auto_increment;
+
+alter table gym_pay
+    add constraint gym_pay_fk foreign key(mrn) references pms_member(no);
 ```
 
 ```
@@ -77,7 +80,8 @@ create table gym_trainer(
     tel varchar(20) not null,
     cts date not null,
     cte date not null,
-    members varchar(255)
+    /*members varchar(255)*/
+    state int default 1
 );
 
 alter table gym_trainer
@@ -85,4 +89,19 @@ alter table gym_trainer
 
 alter table gym_trainer
     modify column no int not null auto_increment;
+```
+
+```
+create table gym_member_trainer(
+    member_no int not null,
+    trainer_no int not null,
+    state int default 1
+);
+
+alter table gym_member_trainer
+    add constraint gym_member_trainer_fk1 foreign key(member_no) references gym_member(no),
+    add constraint gym_member_trainer_fk2 foreign key(trainer_no) references gym_trainer(no);
+
+alter table gym_member_trainer
+    add constraint gym_member_trainer_pk primary key(member_no, trainer_no);
 ```
