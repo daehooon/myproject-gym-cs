@@ -15,13 +15,23 @@ public class PayListHandler implements Command {
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
-            "select no,mrn,mrs,pt,sdt,edt from gym_pay order by mrn asc");
+            "select"
+                + " p.no,"
+                + " p.mrs,"
+                + " p.pt,"
+                + " p.sdt,"
+                + " p.edt,"
+                + " m.no as owner_no,"
+                + " m.name as owner_name"
+                + " from gym_pay p"
+                + " inner join gym_member m on p.owner=m.no"
+                + " order by p.owner asc");
         ResultSet rs = stmt.executeQuery()) {
 
       while (rs.next()) {
         System.out.printf("%d, %s, %s, %s, %s, %s\n",
             rs.getInt("no"),
-            rs.getString("mrn"),
+            rs.getString("owner_name"),
             Pay.getMembershipLabel(rs.getInt("mrs")),
             Pay.getPtLabel(rs.getInt("pt")),
             rs.getDate("sdt"),

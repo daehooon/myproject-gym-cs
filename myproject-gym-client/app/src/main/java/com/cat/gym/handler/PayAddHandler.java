@@ -20,8 +20,8 @@ public class PayAddHandler implements Command {
 
     Pay p = new Pay();
 
-    p.setMemberName(memberValidator.inputMember("회원명(취소: 빈 문자열): "));
-    if (p.getMemberName() == null) {
+    p.setOwner(memberValidator.inputMember("회원명(취소: 빈 문자열): "));
+    if (p.getOwner() == null) {
       System.out.println("결제/예약을 취소합니다.");
       return;
     }
@@ -49,10 +49,10 @@ public class PayAddHandler implements Command {
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
-            "insert into gym_pay(mrn,mrs,nmr,rental,locker,pt,sdt,edt)"
+            "insert into gym_pay(owner,mrs,nmr,rental,locker,pt,sdt,edt)"
                 + " values(?,?,?,?,?,?,?,?)")) {
 
-      stmt.setString(1, p.getMemberName());
+      stmt.setInt(1, p.getOwner().getNo());
       stmt.setInt(2, p.getMembership());
       stmt.setInt(3, p.getNewMember());
       stmt.setInt(4, p.getRental());

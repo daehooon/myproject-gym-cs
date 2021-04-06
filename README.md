@@ -1,7 +1,7 @@
 # Cat Gym - CS
 
 ### Notice
-    ● 30-c-client(2단계) ~ d, 31-c 까지 만들기
+    ● 30-d-client(1단계 domain.Task 변경), 31-d, 32-a 까지 만들기
 
 ## Patch List
 
@@ -51,7 +51,8 @@ alter table gym_member
 ```
 create table gym_pay(
     no int not null,
-    mrn int not null,
+    owner int not null,
+    trainer_no int not null,
     mrs int not null default 0,
     nmr int not null default 0,
     rental int not null default 0,
@@ -68,7 +69,8 @@ alter table gym_pay
     modify column no int not null auto_increment;
 
 alter table gym_pay
-    add constraint gym_pay_fk foreign key(mrn) references pms_member(no);
+    add constraint gym_pay_fk1 foreign key(owner, trainer_no)
+        references gym_member_trainer(member_no, trainer_no);
 ```
 
 ```

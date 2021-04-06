@@ -14,10 +14,14 @@ public class TrainerDetailHandler implements Command {
 
     int no = Prompt.inputInt("트레이너 번호: ");
 
-    try (Connection con = DriverManager.getConnection( //
+    try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-        PreparedStatement stmt = con.prepareStatement( //
-            "select * from gym_trainer where no=?")) {
+        PreparedStatement stmt = con.prepareStatement(
+            "select * from gym_trainer where no=?");
+        PreparedStatement stmt2 = con.prepareStatement(
+            "select m.no,m.name from gym_memer_trainer mt"
+                + " inner join gym_member m on mt.member_no=m.no"
+                + " where mt.trainer_no=?")) {
 
       stmt.setInt(1, no);
 
@@ -33,7 +37,20 @@ public class TrainerDetailHandler implements Command {
         System.out.printf("전화번호: %s\n", rs.getString("tel"));
         System.out.printf("계약 시작일: %s\n", rs.getDate("cts"));
         System.out.printf("계약 종료일: %s\n", rs.getDate("cte"));
-        System.out.printf("PT 회원명: %s\n", rs.getString("members"));
+
+        StringBuilder strings = new StringBuilder();
+
+        stmt2.setInt(1, no);
+        try (ResultSet membersRs = stmt2.executeQuery()) {
+          while (membersRs.next()) {
+            if (strings.length() > 0) {
+              strings.append(",");
+            }
+            strings.append(membersRs.getString("name"));
+          }
+        }
+
+        System.out.printf("PT 회원명: %s\n", strings);
       }
     }
   }
