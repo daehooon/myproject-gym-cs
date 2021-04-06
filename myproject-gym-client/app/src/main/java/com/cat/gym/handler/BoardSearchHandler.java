@@ -1,12 +1,17 @@
 package com.cat.gym.handler;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.util.List;
+import com.cat.gym.dao.BoardDao;
+import com.cat.gym.domain.Board;
 import com.cat.util.Prompt;
 
 public class BoardSearchHandler implements Command {
+
+  BoardDao boardDao;
+
+  public BoardSearchHandler(BoardDao boardDao) {
+    this.boardDao = boardDao;
+  }
 
   @Override
   public void service() throws Exception {
@@ -15,39 +20,24 @@ public class BoardSearchHandler implements Command {
     String keyword = Prompt.inputString("검색어: ");
 
     if (keyword.length() == 0) {
-      System.out.println("다시 입력하세요.");
+      System.out.println("검색어를 입력하세요.");
       return;
     }
 
-    try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-        PreparedStatement stmt = con.prepareStatement(
-            "select no,title,writer,cdt,vw_cnt"
-                + " from gym_board"
-                + " where title like concat('%',?,'%')"
-                + " or content like concat('%',?,'%')"
-                + " or writer like concat('%',?,'%')"
-                + " order by no desc")) {
+    List<Board> list = boardDao.findByKeyword(keyword);
 
-      stmt.setString(1, keyword);
-      stmt.setString(2, keyword);
-      stmt.setString(3, keyword);
+    if (list.size() == 0) {
+      System.out.println("검색어에 해당하는 게시글이 없습니다.");
+      return;
+    }
 
-      try (ResultSet rs = stmt.executeQuery()) {
-        if (!rs.next()) {
-          System.out.println("해당 검색어의 게시글이 없습니다.");
-          return;
-        }
-
-        do {
-          System.out.printf("%d, %s, %s, %s, %d\n", 
-              rs.getInt("no"), 
-              rs.getString("title"), 
-              rs.getString("writer"),
-              rs.getDate("cdt"),
-              rs.getInt("vw_cnt"));
-        } while (rs.next());
-      }
+    for (Board b : list) {
+      System.out.printf("%d, %s, %s, %s, %d\n", 
+          b.getNo(), 
+          b.getTitle(), 
+          b.getWriter().getName(),
+          b.getRegisteredDate(),
+          b.getViewCount());
     }
   }
 }

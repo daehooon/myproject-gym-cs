@@ -12,12 +12,15 @@ public class Pay {
   private int pt;
   private Date startDate;
   private Date endDate;
+  private int trainerNo;
+  private String trainerName;
 
   @Override
   public String toString() {
     return "Pay [no=" + no + ", owner=" + owner + ", membership=" + membership + ", newMember="
         + newMember + ", rental=" + rental + ", locker=" + locker + ", pt=" + pt + ", startDate="
-        + startDate + ", endDate=" + endDate + "]";
+        + startDate + ", endDate=" + endDate + ", trainerNo=" + trainerNo + ", trainerName="
+        + trainerName + "]";
   }
 
   public int getNo() {
@@ -73,6 +76,18 @@ public class Pay {
   }
   public void setEndDate(Date endDate) {
     this.endDate = endDate;
+  }
+  public int getTrainerNo() {
+    return trainerNo;
+  }
+  public void setTrainerNo(int trainerNo) {
+    this.trainerNo = trainerNo;
+  }
+  public String getTrainerName() {
+    return trainerName;
+  }
+  public void setTrainerName(String trainerName) {
+    this.trainerName = trainerName;
   }
 
   public static String getMembershipLabel(int select) {

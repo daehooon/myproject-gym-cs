@@ -1,9 +1,19 @@
 package com.cat.gym;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import com.cat.gym.dao.BoardDao;
+import com.cat.gym.dao.MemberDao;
+import com.cat.gym.dao.PayDao;
+import com.cat.gym.dao.TrainerDao;
+import com.cat.gym.dao.mariadb.BoardDaoImpl;
+import com.cat.gym.dao.mariadb.MemberDaoImpl;
+import com.cat.gym.dao.mariadb.PayDaoImpl;
+import com.cat.gym.dao.mariadb.TrainerDaoImpl;
 import com.cat.gym.handler.BoardAddHandler;
 import com.cat.gym.handler.BoardDeleteHandler;
 import com.cat.gym.handler.BoardDetailHandler;
@@ -56,34 +66,42 @@ public class ClientApp {
 
   public void execute() throws Exception {
 
+    Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+
+    BoardDao boardDao = new BoardDaoImpl(con);
+    MemberDao memberDao = new MemberDaoImpl(con);
+    PayDao payDao = new PayDaoImpl(con);
+    TrainerDao trainerDao = new TrainerDaoImpl(con);
+
     HashMap<String,Command> commandMap = new HashMap<>();
 
-    commandMap.put("/board/add", new BoardAddHandler());
-    commandMap.put("/board/list", new BoardListHandler());
-    commandMap.put("/board/detail", new BoardDetailHandler());
-    commandMap.put("/board/update", new BoardUpdateHandler());
-    commandMap.put("/board/delete", new BoardDeleteHandler());
-    commandMap.put("/board/search", new BoardSearchHandler());
+    commandMap.put("/board/add", new BoardAddHandler(boardDao));
+    commandMap.put("/board/list", new BoardListHandler(boardDao));
+    commandMap.put("/board/detail", new BoardDetailHandler(boardDao));
+    commandMap.put("/board/update", new BoardUpdateHandler(boardDao));
+    commandMap.put("/board/delete", new BoardDeleteHandler(boardDao));
+    commandMap.put("/board/search", new BoardSearchHandler(boardDao));
 
-    commandMap.put("/member/add", new MemberAddHandler());
-    commandMap.put("/member/list", new MemberListHandler());
-    commandMap.put("/member/detail", new MemberDetailHandler());
-    commandMap.put("/member/update", new MemberUpdateHandler());
-    commandMap.put("/member/delete", new MemberDeleteHandler());
+    commandMap.put("/member/add", new MemberAddHandler(memberDao));
+    commandMap.put("/member/list", new MemberListHandler(memberDao));
+    commandMap.put("/member/detail", new MemberDetailHandler(memberDao));
+    commandMap.put("/member/update", new MemberUpdateHandler(memberDao));
+    commandMap.put("/member/delete", new MemberDeleteHandler(memberDao));
 
-    MemberValidator memberValidator = new MemberValidator();
+    MemberValidator memberValidator = new MemberValidator(memberDao);
 
-    commandMap.put("/pay/add", new PayAddHandler(memberValidator));
-    commandMap.put("/pay/list", new PayListHandler());
-    commandMap.put("/pay/detail", new PayDetailHandler());
-    commandMap.put("/pay/update", new PayUpdateHandler());
-    commandMap.put("/pay/delete", new PayDeleteHandler());
+    commandMap.put("/pay/add", new PayAddHandler(payDao, trainerDao, memberValidator));
+    commandMap.put("/pay/list", new PayListHandler(payDao));
+    commandMap.put("/pay/detail", new PayDetailHandler(payDao));
+    commandMap.put("/pay/update", new PayUpdateHandler(payDao, trainerDao));
+    commandMap.put("/pay/delete", new PayDeleteHandler(payDao));
 
-    commandMap.put("/trainer/add", new TrainerAddHandler(memberValidator));
-    commandMap.put("/trainer/list", new TrainerListHandler());
-    commandMap.put("/trainer/detail", new TrainerDetailHandler());
-    commandMap.put("/trainer/update", new TrainerUpdateHandler(memberValidator));
-    commandMap.put("/trainer/delete", new TrainerDeleteHandler());
+    commandMap.put("/trainer/add", new TrainerAddHandler(trainerDao, memberValidator));
+    commandMap.put("/trainer/list", new TrainerListHandler(trainerDao));
+    commandMap.put("/trainer/detail", new TrainerDetailHandler(trainerDao));
+    commandMap.put("/trainer/update", new TrainerUpdateHandler(trainerDao, memberValidator));
+    commandMap.put("/trainer/delete", new TrainerDeleteHandler(trainerDao));
 
     try {
       while (true) {
@@ -142,6 +160,7 @@ public class ClientApp {
       System.out.println("서버와 통신 하는 중에 오류 발생!");
     }
 
+    con.close();
     Prompt.close();
   }
 

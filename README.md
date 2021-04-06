@@ -1,7 +1,8 @@
 # Cat Gym - CS
 
 ### Notice
-    ● 30-d-client(1단계 domain.Task 변경), 31-d, 32-a 까지 만들기
+    ● 30-d-PayAdd만 변경함(나머지 payXXXHandler 변경 요망),
+      31-d(p,t - DaoImpl, xXHandler), 32-a 까지 만들기
 
 ## Patch List
 
@@ -14,10 +15,9 @@ create table gym_board(
     no int not null,
     title varchar(255) not null,
     content text not null,
-    writer varchar(30) not null,
+    writer int not null,
     cdt datetime default now(),
-    vw_cnt int default 0,
-    like_cnt int default 0
+    vw_cnt int default 0
 );
 
 alter table gym_board
@@ -25,6 +25,9 @@ alter table gym_board
 
 alter table gym_board
     modify column no int not null auto_increment;
+
+alter table gym_board
+  add constraint gym_board_fk foreign key(writer) references gym_member(no);
 ```
 
 ```
