@@ -6,15 +6,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import com.cat.gym.dao.PayDao;
+import com.cat.gym.dao.TrainerDao;
 import com.cat.gym.domain.Pay;
 import com.cat.gym.domain.Trainer;
 import com.cat.util.Prompt;
 
 public class PayAddHandler implements Command {
 
+  PayDao payDao;
+  TrainerDao trainerDao;
   MemberValidator memberValidator;
 
-  public PayAddHandler(MemberValidator memberValidator) {
+  public PayAddHandler(PayDao payDao, TrainerDao trainerDao, MemberValidator memberValidator) {
+    this.payDao = payDao;
+    this.trainerDao = trainerDao;
     this.memberValidator = memberValidator;
   }
 
@@ -23,6 +29,7 @@ public class PayAddHandler implements Command {
     System.out.println("[결제/예약 신청]");
 
     List<Trainer> trainers = new ArrayList<>();
+
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(

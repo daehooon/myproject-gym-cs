@@ -1,19 +1,16 @@
 package com.cat.gym.handler;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import com.cat.gym.domain.Member;
+import com.cat.gym.dao.TrainerDao;
 import com.cat.gym.domain.Trainer;
 import com.cat.util.Prompt;
 
 public class TrainerAddHandler implements Command {
 
+  TrainerDao trainerDao;
   MemberValidator memberValidator;
 
-  public TrainerAddHandler(MemberValidator memberValidator) {
+  public TrainerAddHandler(TrainerDao trainerDao, MemberValidator memberValidator) {
+    this.trainerDao = trainerDao;
     this.memberValidator = memberValidator;
   }
 
@@ -32,39 +29,9 @@ public class TrainerAddHandler implements Command {
 
     t.setMembers(memberValidator.inputMembers("PT 회원명(완료: 빈 문자열): "));
 
-    try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-        PreparedStatement stmt = con.prepareStatement(
-            "insert into gym_trainer(bag,photo,name,tel,cts,cte) values(?,?,?,?,?,?)",
-            Statement.RETURN_GENERATED_KEYS);
-        PreparedStatement stmt2 = con.prepareStatement(
-            "insert into gym_member_trainer(member_no,trainer_no) values(?,?)")) {
+    trainerDao.insert(t);
 
-      con.setAutoCommit(false);
-
-      stmt.setString(1, t.getBag());
-      stmt.setString(2, t.getPhoto());
-      stmt.setString(3, t.getName());
-      stmt.setString(4, t.getPhoneNumber());
-      stmt.setDate(5, t.getContractS());
-      stmt.setDate(6, t.getContractE());
-      stmt.executeUpdate();
-
-      try (ResultSet keyRs = stmt.getGeneratedKeys()) {
-        keyRs.next();
-        t.setNo(keyRs.getInt(1));
-      }
-
-      for (Member member : t.getMembers()) {
-        stmt2.setInt(1, member.getNo());
-        stmt2.setInt(2, t.getNo());
-        stmt2.executeUpdate();
-      }
-
-      con.commit();
-
-      System.out.println("신규 트레이너님 환영합니다..!");
-    }
+    System.out.println("신규 트레이너님 환영합니다..!");
   }
 }
 

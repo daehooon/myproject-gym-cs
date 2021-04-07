@@ -15,17 +15,7 @@ public class PayListHandler implements Command {
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
-            "select"
-                + " p.no,"
-                + " p.mrs,"
-                + " p.pt,"
-                + " p.sdt,"
-                + " p.edt,"
-                + " m.no as owner_no,"
-                + " m.name as owner_name"
-                + " from gym_pay p"
-                + " inner join gym_member m on p.owner=m.no"
-                + " order by p.owner asc");
+            );
         ResultSet rs = stmt.executeQuery()) {
 
       while (rs.next()) {

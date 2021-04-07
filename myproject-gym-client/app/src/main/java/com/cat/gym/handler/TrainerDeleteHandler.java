@@ -1,11 +1,15 @@
 package com.cat.gym.handler;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
+import com.cat.gym.dao.TrainerDao;
 import com.cat.util.Prompt;
 
 public class TrainerDeleteHandler implements Command {
+
+  TrainerDao trainerDao;
+
+  public TrainerDeleteHandler(TrainerDao trainerDao) {
+    this.trainerDao = trainerDao;
+  }
 
   @Override
   public void service() throws Exception {
@@ -19,26 +23,11 @@ public class TrainerDeleteHandler implements Command {
       return;
     }
 
-    try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-        PreparedStatement stmt = con.prepareStatement(
-            "delete from gym_member_trainer where trainer_no=?");
-        PreparedStatement stmt2 = con.prepareStatement(
-            "delete from gym_trainer where no=?")) {
+    if (trainerDao.delete(no) == 0) {
+      System.out.println("해당 번호의 트레이너가 없습니다.");
 
-      con.setAutoCommit(false);
-
-      stmt.setInt(1, no);
-      stmt.executeUpdate();
-
-      stmt2.setInt(1, no);
-
-      if (stmt.executeUpdate() == 0) {
-        System.out.println("해당 번호의 트레이너가 없습니다.");
-      } else {
-        con.commit();
-        System.out.println("트레이너를 삭제하였습니다.");
-      }
+    } else {
+      System.out.println("트레이너를 삭제하였습니다.");
     }
   }
 }

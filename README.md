@@ -1,8 +1,7 @@
 # Cat Gym - CS
 
 ### Notice
-    ● 30-d-PayAdd만 변경함(나머지 payXXXHandler 변경 요망),
-      31-d(p,t - DaoImpl, xXHandler), 32-a 까지 만들기
+    ● 31-d(p - DaoImpl(insert, findAll은 완성), xXHandler), 32-a ~ b 까지 만들기
 
 ## Patch List
 
