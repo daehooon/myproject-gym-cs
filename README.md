@@ -1,7 +1,7 @@
 # Cat Gym - CS
 
 ### Notice
-    ● 31-d(p - DaoImpl(insert, findAll은 완성), xXHandler), 32-a ~ c, 33-a ~ b 까지 만들기
+    ● 23-d(p - DaoImpl(insert, findAll은 완성), xXHandler), 25-c 비즈니스 로직까지 만들기
 
 ## Patch List
 
