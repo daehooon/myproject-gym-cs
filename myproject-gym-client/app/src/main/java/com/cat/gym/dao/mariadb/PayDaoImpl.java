@@ -8,7 +8,6 @@ import java.util.List;
 import com.cat.gym.dao.PayDao;
 import com.cat.gym.domain.Member;
 import com.cat.gym.domain.Pay;
-import jdk.internal.org.jline.utils.ShutdownHooks.Task;
 
 public class PayDaoImpl implements PayDao {
 
@@ -102,26 +101,26 @@ public class PayDaoImpl implements PayDao {
     }
   }
 
-
-
-
-
   @Override
-  public Task findByNo(int no) throws Exception {
+  public Pay findByNo(int no) throws Exception {
     try (PreparedStatement stmt = con.prepareStatement(
-        "select "
-            + "   t.no,"
-            + "   t.content,"
-            + "   t.deadline,"
-            + "   t.status,"
-            + "   m.no as owner_no,"
-            + "   m.name as owner_name,"
-            + "   p.no as project_no,"
-            + "   p.title as project_title"
-            + " from pms_task t "
-            + "   inner join pms_member m on t.owner=m.no"
-            + "   inner join pms_project p on t.project_no=p.no"
-            + " where t.no=?")) {
+        "select"
+            + "  p.no,"
+            + "  p.mrs,"
+            + "  p.nmr,"
+            + "  p.rental,"
+            + "  p.locker,"
+            + "  p.pt,"
+            + "  p.sdt,"
+            + "  p.edt,"
+            + "  m.no as owner_no,"
+            + "  m.name as owner_name,"
+            + "  t.no as trainer_no,"
+            + "  t.name as trainer_name"
+            + " from gym_pay p"
+            + "  inner join gym_member m on p.owner=m.no"
+            + "  inner join gym_trainer t on p.trainer_no=t.no"
+            + " where p.no=?")) {
 
       stmt.setInt(1, no);
 
@@ -130,29 +129,33 @@ public class PayDaoImpl implements PayDao {
           return null;
         }
 
-        Task task = new Task();
-        task.setNo(rs.getInt("no"));
-        task.setContent(rs.getString("content"));
-        task.setDeadline(rs.getDate("deadline"));
-        task.setStatus(rs.getInt("status"));
+        Pay pay = new Pay();
+        pay.setNo(rs.getInt("no"));
+        pay.setMembership(rs.getInt("content"));
+        pay.setNewMember(rs.getInt("nmr"));
+        pay.setRental(rs.getInt("rental"));
+        pay.setLocker(rs.getInt("locker"));
+        pay.setPt(rs.getInt("pt"));
+        pay.setStartDate(rs.getDate("sdt"));
+        pay.setEndDate(rs.getDate("edt"));
 
         Member owner = new Member();
         owner.setNo(rs.getInt("owner_no"));
         owner.setName(rs.getString("owner_name"));
-        task.setOwner(owner);
+        pay.setOwner(owner);
 
-        task.setProjectNo(rs.getInt("project_no"));
-        task.setProjectTitle(rs.getString("project_title"));
+        pay.setTrainerNo(rs.getInt("trainer_no"));
+        pay.setTrainerName(rs.getString("trainer_name"));
 
-        return task;
+        return pay;
       }
     }
   }
 
   @Override
-  public int update(Task task) throws Exception {
+  public int update(Pay pay) throws Exception {
     try (PreparedStatement stmt = con.prepareStatement(
-        "update pms_task set content=?,deadline=?,owner=?,status=?,project_no=? where no=?")) {
+        "update gym_pay set rental=?,locker=?,pt=?,trainer_no=?,sdt=?,edt=? where no=?")) {
 
       stmt.setString(1, task.getContent());
       stmt.setDate(2, task.getDeadline());
