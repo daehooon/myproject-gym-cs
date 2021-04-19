@@ -1,11 +1,15 @@
 package com.cat.gym.handler;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
+import com.cat.gym.dao.PayDao;
 import com.cat.util.Prompt;
 
 public class PayDeleteHandler implements Command {
+
+  PayDao payDao;
+
+  public PayDeleteHandler(PayDao payDao) {
+    this.payDao = payDao;
+  }
 
   @Override
   public void service() throws Exception {
@@ -19,18 +23,10 @@ public class PayDeleteHandler implements Command {
       return;
     }
 
-    try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-        PreparedStatement stmt = con.prepareStatement(
-            "delete from gym_pay where no=?")){
-
-      stmt.setInt(1, no);
-
-      if (stmt.executeUpdate() == 0) {
-        System.out.println("해당 번호의 결제/예약이 없습니다.");
-      } else {
-        System.out.println("결제/예약을 삭제하였습니다.");        
-      }
+    if (payDao.delete(no) == 0) {
+      System.out.println("해당 번호의 결제/예약이 없습니다.");
+    } else {
+      System.out.println("결제/예약을 삭제하였습니다.");        
     }
   }
 }

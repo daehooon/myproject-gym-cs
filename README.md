@@ -1,7 +1,7 @@
 # Cat Gym - CS
 
 ### Notice
-    ● 23-d(p - DaoImpl(update, delete 미완), xXHandler), 25-c 비즈니스 로직까지 만들기
+    ● 24-a ~ 25-c 비즈니스 로직까지 만들기
 
 ## Patch List
 

@@ -37,20 +37,15 @@ public class PayDaoImpl implements PayDao {
     }
   }
 
-
-
-
   @Override
   public List<Pay> findAll() throws Exception {
     return findAll(0);
   }
 
   @Override
-  public List<Pay> findByProjectNo(int trainerNo) throws Exception {
+  public List<Pay> findByTrainerNo(int trainerNo) throws Exception {
     return findAll(trainerNo);
   }
-
-
 
   private List<Pay> findAll(int trainerNo) throws Exception {
     ArrayList<Pay> list = new ArrayList<>();
@@ -131,7 +126,7 @@ public class PayDaoImpl implements PayDao {
 
         Pay pay = new Pay();
         pay.setNo(rs.getInt("no"));
-        pay.setMembership(rs.getInt("content"));
+        pay.setMembership(rs.getInt("mrs"));
         pay.setNewMember(rs.getInt("nmr"));
         pay.setRental(rs.getInt("rental"));
         pay.setLocker(rs.getInt("locker"));
@@ -157,12 +152,13 @@ public class PayDaoImpl implements PayDao {
     try (PreparedStatement stmt = con.prepareStatement(
         "update gym_pay set rental=?,locker=?,pt=?,trainer_no=?,sdt=?,edt=? where no=?")) {
 
-      stmt.setString(1, task.getContent());
-      stmt.setDate(2, task.getDeadline());
-      stmt.setInt(3, task.getOwner().getNo());
-      stmt.setInt(4, task.getStatus());
-      stmt.setInt(5, task.getProjectNo());
-      stmt.setInt(6, task.getNo());
+      stmt.setInt(1, pay.getRental());
+      stmt.setInt(2, pay.getLocker());
+      stmt.setInt(3, pay.getPt());
+      stmt.setInt(4, pay.getTrainerNo());
+      stmt.setDate(5, pay.getStartDate());
+      stmt.setDate(6, pay.getEndDate());
+      stmt.setInt(7, pay.getNo());
       return stmt.executeUpdate();
     }
   }
@@ -170,7 +166,7 @@ public class PayDaoImpl implements PayDao {
   @Override
   public int delete(int no) throws Exception {
     try (PreparedStatement stmt = con.prepareStatement(
-        "delete from pms_task where no=?")) {
+        "delete from gym_pay where no=?")) {
 
       stmt.setInt(1, no);
       return stmt.executeUpdate();
