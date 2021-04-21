@@ -1,7 +1,7 @@
 # Cat Gym - CS
 
 ### Notice
-    ● 24-a ~ 25-c 비즈니스 로직까지 만들기
+    ● 24-a (BoardMapper, BoardDaoImpl 부터) ~ 25-c 비즈니스 로직 만들기 ~ 28-a
 
 ## Patch List
 
