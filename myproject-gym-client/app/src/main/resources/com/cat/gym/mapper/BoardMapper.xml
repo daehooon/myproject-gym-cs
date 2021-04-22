@@ -13,15 +13,15 @@
     <result column="vw_cnt" property="viewCount"/>
     <result column="like_cnt" property="like"/>
     
-    <association property="writer" javaType="com.eomcs.pms.domain.Member">
+    <association property="writer" javaType="com.cat.gym.domain.Member">
 	    <id column="writer_no" property="no"/>
 	    <result column="writer_name" property="name"/>
     </association>
     
   </resultMap>
   
-  <insert id="insert" parameterType="com.eomcs.pms.domain.Board">
-    insert into pms_board(title, content, writer) 
+  <insert id="insert" parameterType="com.cat.gym.domain.Board">
+    insert into gym_board(title, content, writer)
     values(#{title}, #{content}, #{writer.no})
   </insert>
   
@@ -34,8 +34,8 @@
       b.like_cnt,
       m.no as writer_no,
       m.name as writer_name
-    from pms_board b
-      inner join pms_member m on m.no=b.writer
+    from gym_board b
+      inner join gym_member m on m.no=b.writer
     order by b.no desc
   </select>
   
@@ -48,9 +48,9 @@
       b.like_cnt,
       m.no as writer_no,
       m.name as writer_name
-    from pms_board b
-      inner join pms_member m on m.no=b.writer
-    where 
+    from gym_board b
+      inner join gym_member m on m.no=b.writer
+    where
       b.title like concat('%', #{value},'%')
       or b.content like concat('%', #{value},'%')
       or m.name like concat('%', #{value},'%')
@@ -67,27 +67,27 @@
       b.like_cnt,
       m.no as writer_no,
       m.name as writer_name
-    from pms_board b
-      inner join pms_member m on m.no=b.writer
+    from gym_board b
+      inner join gym_member m on m.no=b.writer
     where b.no = #{value}
   </select>
   
-  <update id="update" parameterType="com.eomcs.pms.domain.Board">
-    update pms_board set
-        title = #{title}, 
-        content = #{content}
-    where no = #{no}
+  <update id="update" parameterType="com.cat.gym.domain.Board">
+    update gym_board set
+        title=#{title}, 
+        content=#{content}
+    where no=#{no}
   </update>
   
   <update id="updateViewCount" parameterType="int">
-    update pms_board set 
-      vw_cnt = vw_cnt + 1 
-    where no = #{value}
+    update gym_board set 
+      vw_cnt=vw_cnt + 1 
+    where no=#{value}
   </update>
   
   <delete id="delete" parameterType="int">
-    delete from pms_board 
-    where no = #{value}
+    delete from gym_board 
+    where no=#{value}
   </delete>
 
 </mapper>

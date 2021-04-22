@@ -1,33 +1,24 @@
 package com.cat.gym.dao.mariadb;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.ibatis.session.SqlSession;
 import com.cat.gym.dao.MemberDao;
 import com.cat.gym.domain.Member;
 
 public class MemberDaoImpl implements MemberDao {
 
-  Connection con;
+  SqlSession sqlSession;
 
-  public MemberDaoImpl(Connection con) throws Exception {
-    this.con = con;
+  public MemberDaoImpl(SqlSession sqlSession) throws Exception {
+    this.sqlSession = sqlSession;
   }
 
   @Override
   public int insert(Member member) throws Exception {
-    try (PreparedStatement stmt = con.prepareStatement(
-        "insert into gym_member(name,email,password,photo,tel) values(?,?,password(?),?,?)");) {
-
-      stmt.setString(1, member.getName());
-      stmt.setString(2, member.getEmail());
-      stmt.setString(3, member.getPassword());
-      stmt.setString(4, member.getPhoto());
-      stmt.setString(5, member.getTel());
-      return stmt.executeUpdate();
-    }
+    return sqlSession.insert
   }
 
   @Override

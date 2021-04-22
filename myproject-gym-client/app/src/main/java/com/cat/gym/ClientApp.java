@@ -1,11 +1,14 @@
 package com.cat.gym;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.io.InputStream;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import com.cat.gym.dao.BoardDao;
 import com.cat.gym.dao.MemberDao;
 import com.cat.gym.dao.PayDao;
@@ -66,13 +69,17 @@ public class ClientApp {
 
   public void execute() throws Exception {
 
-    Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+    InputStream mybatisConfigStream = Resources.getResourceAsStream(
+        "con/cat/gym/conf/mybatis-config.xml");
 
-    BoardDao boardDao = new BoardDaoImpl(con);
-    MemberDao memberDao = new MemberDaoImpl(con);
-    PayDao payDao = new PayDaoImpl(con);
-    TrainerDao trainerDao = new TrainerDaoImpl(con);
+    SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(mybatisConfigStream);
+
+    SqlSession sqlSession = sqlSessionFactory.openSession(true);
+
+    BoardDao boardDao = new BoardDaoImpl(sqlSession);
+    MemberDao memberDao = new MemberDaoImpl(sqlSession);
+    PayDao payDao = new PayDaoImpl(sqlSession);
+    TrainerDao trainerDao = new TrainerDaoImpl(sqlSession);
 
     HashMap<String,Command> commandMap = new HashMap<>();
 
@@ -160,7 +167,7 @@ public class ClientApp {
       System.out.println("서버와 통신 하는 중에 오류 발생!");
     }
 
-    con.close();
+    sqlSession.close();
     Prompt.close();
   }
 
