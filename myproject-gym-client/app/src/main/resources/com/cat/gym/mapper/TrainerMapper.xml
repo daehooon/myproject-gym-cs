@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="TrainerMapper">
+  
+  <resultMap id="trainerMap" type="com.cat.gym.domain.Trainer">
+    <id column="no" property="no"/>
+    <result column="bag" property="bag"/>
+    <result column="photo" property="photo"/>
+    <result column="name" property="name"/>
+    <result column="tel" property="phoneNumber"/>
+    <result column="cts" property="contractS"/>
+    <result column="cte" property="contractE"/>
+    
+    <collection property="members" ofType="com.cat.gym.domain.Member">
+      <id column="member_no" property="no"/>
+      <result column="member_name" property="name"/>
+    </collection>
+  </resultMap>
+  
+  <insert id="insert" parameterType="com.cat.gym.domain.Trainer"
+          useGeneratedKeys="true" keyColumn="no" keyProperty="no">
+    insert into gym_trainer(bag,photo,name,tel,cts,cte) 
+    values(#{bag}, #{photo}, #{name}, #{phoneNumber}, #{contractS}, #{contractE})
+  </insert>
+  
+  <select id="findAll" resultMap="projectMap">
+    select
+      p.no,
+      p.title,
+      p.sdt,
+      p.edt,
+      m.no as owner_no,
+      m.name as owner_name,
+      m2.no as member_no,
+      m2.name as member_name
+    from pms_project p
+      inner join pms_member m on p.owner=m.no
+      left outer join pms_member_project mp on mp.project_no=p.no
+      left outer join pms_member m2 on mp.member_no=m2.no
+    order by title asc
+  </select>
+  
+  <select id="findByNo" resultMap="projectMap" parameterType="int">
+    select
+      p.no,
+      p.title,
+      p.content,
+      p.sdt,
+      p.edt,
+      m.no as owner_no,
+      m.name as owner_name,
+      m2.no as member_no,
+      m2.name as member_name
+    from pms_project p
+      inner join pms_member m on p.owner=m.no
+      left outer join pms_member_project mp on mp.project_no=p.no
+      left outer join pms_member m2 on mp.member_no=m2.no
+    where p.no=#{value}
+  </select>
+  
+  <update id="update" parameterType="com.eomcs.pms.domain.Project">
+    update pms_project set
+      title=#{title},
+      content=#{content},
+      sdt=#{startDate},
+      edt=#{endDate},
+      owner=#{owner.no}
+    where no=#{no}
+  </update>
+  
+  <delete id="delete" parameterType="int">
+    delete from pms_project 
+    where no=#{value}
+  </delete>
+
+
+  <insert id="insertMember" parameterType="map">
+    insert into pms_member_project(member_no,project_no) 
+    values(#{memberNo}, #{projectNo})
+  </insert>
+  
+  <delete id="deleteMembers" parameterType="int">
+    delete from pms_member_project 
+    where project_no=#{value}
+  </delete>
+  
+  <select id="findAllMembers" resultType="com.eomcs.pms.domain.Member" parameterType="int">
+    select
+      m.no,
+      m.name
+    from pms_member_project mp
+      inner join pms_member m on mp.member_no=m.no
+    where 
+      mp.project_no=#{value}
+  </select>
+</mapper>
+
+
+
+
+
+
+

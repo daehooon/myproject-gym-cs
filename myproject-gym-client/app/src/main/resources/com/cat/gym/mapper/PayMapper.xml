@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="PayMapper">
+  
+  <resultMap id="payMap" type="com.cat.gym.domain.Pay">
+    <id column="no" property="no"/>
+    <result column="trainer_no" property="trainerNo"/>
+    <result column="trainer_name" property="trainerName"/>
+    <result column="mrs" property="membership"/>
+    <result column="nmr" property="newMember"/>
+    <result column="rental" property="rental"/>
+    <result column="locker" property="locker"/>
+    <result column="pt" property="pt"/>
+    <result column="sdt" property="startDate"/>
+    <result column="edt" property="endDate"/>
+    
+    <association property="owner" javaType="com.cat.gym.domain.Member">
+	    <id column="owner_no" property="no"/>
+	    <result column="owner_name" property="name"/>
+    </association>
+  </resultMap>
+  
+  <insert id="insert" parameterType="com.cat.gym.domain.Pay">
+    insert into gym_pay(owner,mrs,nmr,rental,locker,pt,trainer_no,sdt,edt) 
+    values(#{owner.no}, #{membership}, #{newMember}, #{rental}, #{locker},
+           #{pt}, #{trainerNo} , #{startDate}, #{endDate})
+  </insert>
+  
+  <select id="findAll" resultMap="payMap">
+    select
+      p.no,
+      p.mrs,
+      p.sdt,
+      p.edt,
+      m.no as owner_no,
+      m.name as owner_name,
+      t.no as trainer_no,
+      t.name as trainer_name
+    from
+      gym_pay p
+      inner join gym_member m on p.owner=m.no
+      inner join gym_trainer t on p.trainer_no=t.no
+    order by
+      p.owner asc
+  </select>
+  
+  <select id="findByTrainerNo" resultMap="payMap" parameterType="int">
+    select
+      p.no,
+      p.mrs,
+      p.sdt,
+      p.edt,
+      m.no as owner_no,
+      m.name as owner_name,
+      t.no as trainer_no,
+      t.name as trainer_name
+    from
+      gym_pay p
+      inner join gym_member m on p.owner=m.no
+      inner join gym_trainer t on p.trainer_no=t.no
+    where
+      t.no=#{value}
+    order by
+      p.owner asc
+  </select>
+  
+  <select id="findByNo" resultMap="payMap" parameterType="int">
+    select
+      p.no,
+      p.mrs,
+      p.nmr,
+      p.rental,
+      p.locker,
+      p.pt,
+      p.sdt,
+      p.edt,
+      m.no as owner_no,
+      m.name as owner_name,
+      t.no as trainer_no,
+      t.name as trainer_name
+    from
+      gym_pay p
+      inner join gym_member m on p.owner=m.no
+      inner join gym_trainer t on p.trainer_no=t.no
+    where
+      p.no=#{value}
+  </select>
+  
+  <update id="update" parameterType="com.cat.gym.domain.Pay">
+    update gym_pay set 
+      rental=#{rental},
+      locker=#{locker},
+      pt=#{pt},
+      trainer_no=#{trainerNo},
+      sdt=#{startDate},
+      edt=#{endDate}
+    where
+      no=#{no}
+  </update>
+  
+  <delete id="delete" parameterType="int">
+    delete from gym_pay 
+    where
+      no=#{value}
+  </delete>
+
+  <delete id="deleteByTrainerNo" parameterType="int">
+    delete from gym_pay 
+    where
+      trainer_no=#{value}
+  </delete>
+</mapper>
+
+
+
+
+
+
+

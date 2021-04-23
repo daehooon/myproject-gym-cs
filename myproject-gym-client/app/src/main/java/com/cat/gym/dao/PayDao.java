@@ -16,4 +16,6 @@ public interface PayDao {
   int update(Pay pay) throws Exception;
 
   int delete(int no) throws Exception;
+
+  int deleteByTrainerNo(int trainerNo) throws Exception;
 }
