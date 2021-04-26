@@ -26,21 +26,20 @@
     values(#{bag}, #{photo}, #{name}, #{phoneNumber}, #{contractS}, #{contractE})
   </insert>
   
-  <select id="findAll" resultMap="projectMap">
+  <select id="findAll" resultMap="trainerMap">
     select
-      p.no,
-      p.title,
-      p.sdt,
-      p.edt,
-      m.no as owner_no,
-      m.name as owner_name,
-      m2.no as member_no,
-      m2.name as member_name
-    from pms_project p
-      inner join pms_member m on p.owner=m.no
+      t.no,
+      t.photo,
+      t.name,
+      t.tel,
+      m.no as member_no,
+      m.name as member_name
+    from
+      gym_trainer t
+      inner join gym_member m on p.owner=m.no
       left outer join pms_member_project mp on mp.project_no=p.no
       left outer join pms_member m2 on mp.member_no=m2.no
-    order by title asc
+    order by name asc
   </select>
   
   <select id="findByNo" resultMap="projectMap" parameterType="int">

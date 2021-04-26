@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.ibatis.session.SqlSession;
 import com.cat.gym.dao.TrainerDao;
 import com.cat.gym.domain.Member;
 import com.cat.gym.domain.Trainer;
@@ -14,8 +15,8 @@ public class TrainerDaoImpl implements TrainerDao {
 
   Connection con;
 
-  public TrainerDaoImpl(Connection con) throws Exception {
-    this.con = con;
+  public TrainerDaoImpl(SqlSession sqlSession) throws Exception {
+    this.con = sqlSession;
   }
 
   @Override

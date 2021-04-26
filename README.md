@@ -1,7 +1,12 @@
 # Cat Gym - CS
 
 ### Notice
-    ● 24-a (TrainerDaoImpl, TrainerMapper는 findAll부터) ~ 25-c 비즈니스 로직 만들기 ~ ... 
+    ● 24-a (TrainerDaoImpl, TrainerMapper는 findAll부터) ~ 25-c 비즈니스 로직 만들기 ~ ...
+    
+      gym 테이블 수정 (22-d-client 참고)
+      pay - owner, trainer_no - fk
+      trainer - member_no - fk
+      member_trainer - 삭제
 
 ## Patch List
 
@@ -49,6 +54,13 @@ alter table gym_member
 alter table gym_member
     add constraint gym_member_uk unique (email);
 ```
+
+
+
+
+
+
+
 
 ```
 create table gym_pay(

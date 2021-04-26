@@ -79,7 +79,7 @@ public class ClientApp {
     BoardDao boardDao = new BoardDaoImpl(sqlSession);
     MemberDao memberDao = new MemberDaoImpl(sqlSession);
     PayDao payDao = new PayDaoImpl(sqlSession);
-    TrainerDao trainerDao = new TrainerDaoImpl(sqlSession);
+//    TrainerDao trainerDao = new TrainerDaoImpl(sqlSession);
 
     HashMap<String,Command> commandMap = new HashMap<>();
 
