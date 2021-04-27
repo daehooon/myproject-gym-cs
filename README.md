@@ -3,6 +3,8 @@
 ### Notice
     ● 24-a (TrainerDaoImpl, TrainerMapper는 findAll부터) ~ 25-c 비즈니스 로직 만들기 ~ ...
     
+    ● 테이블, payAdd, fk(member,pay,trainer 삼각관계) 갈아엎기
+
       gym 테이블 수정 (22-d-client 참고)
       pay - owner, trainer_no - fk
       trainer - member_no - fk
