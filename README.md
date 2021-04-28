@@ -6,6 +6,7 @@
     ● 테이블, payAdd, fk(member,pay,trainer 삼각관계) 갈아엎기
 
       gym 테이블 수정 (22-d-client 참고)
+      board = writer - fk
       pay - owner, trainer_no - fk
       trainer - member_no - fk
       member_trainer - 삭제
