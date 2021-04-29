@@ -3,13 +3,10 @@
 ### Notice
     ● 24-a (TrainerDaoImpl, TrainerMapper는 findAll부터) ~ 25-c 비즈니스 로직 만들기 ~ ...
     
-    ● 테이블, payAdd, fk(member,pay,trainer 삼각관계) 갈아엎기
-
-      gym 테이블 수정 (22-d-client 참고)
-      board = writer - fk
+    ● gym 테이블 수정 (22-d-client 참고) - 미완, sql 수정 (left outer) 미완
       pay - owner, trainer_no - fk
-      trainer - member_no - fk
-      member_trainer - 삭제
+      trainer - state(삭제) -> sql 수정요망
+      member_trainer -> gym_trainer_members(member_no) - pk,fk
 
 ## Patch List
 
